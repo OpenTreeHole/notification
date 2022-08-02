@@ -1,0 +1,33 @@
+basePath: /api
+definitions:
+  models.MessageModel:
+    properties:
+      message:
+        type: string
+    type: object
+info:
+  contact:
+    email: hasbai@fduhole.com
+    name: Maintainer Shi Yue
+  description: This is a notification microservice.
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+  title: Notification Center
+  version: 2.0.0
+paths:
+  /:
+    get:
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.MessageModel'
+securityDefinitions:
+  ApiKeyAuth:
+    in: header
+    name: Authorization
+    type: apiKey
+swagger: "2.0"
