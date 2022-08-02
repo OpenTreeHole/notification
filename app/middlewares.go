@@ -2,6 +2,8 @@ package app
 
 import (
 	"notification/config"
+	"notification/utils"
+	"strconv"
 
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/logger"
@@ -17,4 +19,23 @@ func RegisterMiddlewares(app *fiber.App) {
 	if config.Config.Debug {
 		app.Use(pprof.New())
 	}
+	app.Use(getUserID)
+}
+
+func getUserID(c *fiber.Ctx) error {
+	var userID int
+	var err error
+
+	if config.Config.Debug {
+		userID = 1
+	} else {
+		userID, err = strconv.Atoi(c.Get("X-Consumer-Username"))
+		if err != nil {
+			return utils.Unauthorized("Unauthorized")
+		}
+	}
+
+	c.Locals("userID", userID)
+
+	return c.Next()
 }
