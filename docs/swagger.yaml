@@ -1,9 +1,39 @@
 basePath: /api
 definitions:
+  models.Message:
+    properties:
+      code:
+        type: string
+      data:
+        items:
+          type: integer
+        type: array
+      id:
+        type: integer
+      message:
+        type: string
+      time_created:
+        type: string
+      time_updated:
+        type: string
+    type: object
   models.MessageModel:
     properties:
       message:
         type: string
+    type: object
+  models.PushToken:
+    properties:
+      device_id:
+        type: string
+      id:
+        type: integer
+      service:
+        type: integer
+      token:
+        type: string
+      user_id:
+        type: integer
     type: object
 info:
   contact:
@@ -25,6 +55,80 @@ paths:
           description: OK
           schema:
             $ref: '#/definitions/models.MessageModel'
+  /messages:
+    get:
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/models.Message'
+            type: array
+      summary: List Messages of a User
+      tags:
+      - Message
+  /messages/{id}:
+    delete:
+      parameters:
+      - description: message id
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "204":
+          description: ""
+      summary: Delete a message of a user
+      tags:
+      - Message
+  /messages/clear:
+    post:
+      produces:
+      - application/json
+      responses:
+        "204":
+          description: ""
+      summary: Clear Messages of a User
+      tags:
+      - Message
+  /users/push-tokens:
+    delete:
+      produces:
+      - application/json
+      responses:
+        "204":
+          description: ""
+      summary: Delete the token of a user's certain device
+      tags:
+      - Token
+    get:
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/models.PushToken'
+            type: array
+      summary: List Tokens of a User
+      tags:
+      - Token
+    post:
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.PushToken'
+      summary: Add Token of a User
+      tags:
+      - Token
 securityDefinitions:
   ApiKeyAuth:
     in: header

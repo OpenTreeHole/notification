@@ -7,7 +7,9 @@ import (
 	"net/http"
 	"notification/app"
 	. "notification/models"
+	"strconv"
 	"strings"
+	"sync"
 	"testing"
 
 	"github.com/hetiansu5/urlquery"
@@ -19,6 +21,14 @@ type JsonData interface {
 }
 
 var App = app.Create()
+
+var userIDMock = 0
+var userIDMockLock sync.Mutex
+
+func resetUserIDMock() {
+	userIDMock = 0
+	userIDMockLock.Unlock()
+}
 
 // testCommon tests status code and returns response body in bytes
 func testCommon(t *testing.T, method string, route string, statusCode int, data ...Map) []byte {
@@ -35,6 +45,9 @@ func testCommon(t *testing.T, method string, route string, statusCode int, data 
 		bytes.NewBuffer(requestData),
 	)
 	req.Header.Add("Content-Type", "application/json")
+	if userIDMock != 0 {
+		req.Header.Add("X-Consumer-Username", strconv.Itoa(userIDMock))
+	}
 	assert.Nilf(t, err, "constructs http request")
 
 	res, err := App.Test(req, -1)
@@ -102,10 +115,12 @@ func testAPIArray(t *testing.T, method string, route string, statusCode int, dat
 	return testAPIGeneric[[]Map](t, method, route, statusCode, data...)
 }
 
-func testAPIModel[T Models](t *testing.T, method string, route string, statusCode int, obj *T, data ...Map) {
+func testAPIModel[T Models](t *testing.T, method string, route string, statusCode int, data ...Map) T {
+	var model T
 	responseBytes := testCommon(t, method, route, statusCode, data...)
-	err := json.Unmarshal(responseBytes, obj)
+	err := json.Unmarshal(responseBytes, &model)
 	assert.Nilf(t, err, "unmarshal response")
+	return model
 }
 
 func testAPIModelWithQuery[T Models](t *testing.T, method string, route string, statusCode int, obj *T, data ...Map) {

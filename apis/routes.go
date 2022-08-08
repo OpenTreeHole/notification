@@ -1,6 +1,7 @@
 package apis
 
 import (
+	"notification/apis/message"
 	"notification/apis/token"
 	_ "notification/docs"
 
@@ -25,4 +26,5 @@ func RegisterRoutes(app *fiber.App) {
 	group.Get("/", Index)
 
 	token.RegisterRoutes(group)
+	message.RegisterRoutes(group)
 }

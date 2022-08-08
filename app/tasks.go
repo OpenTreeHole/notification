@@ -1,5 +1,7 @@
 package app
 
-func startTasks() {
+import "notification/apis/message"
 
+func startTasks() {
+	go message.PurgeMessage()
 }

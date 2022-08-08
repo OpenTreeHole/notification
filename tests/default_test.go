@@ -1,13 +1,15 @@
 package tests
 
 import (
-	. "notification/models"
+	"github.com/stretchr/testify/assert"
 	"testing"
 )
 
 func TestIndex(t *testing.T) {
-	testAPI(t, "get", "/", 200, nil, Map{"message": "hello world"})
-	testAPI(t, "get", "/404", 404, nil, Map{"message": "Cannot GET /404"})
+	testCommon(t, "get", "/", 302)
+	testCommon(t, "get", "/api", 200)
+	data := testAPI(t, "get", "/404", 404)
+	assert.Equal(t, "Cannot GET /404", data["message"])
 }
 
 func TestDocs(t *testing.T) {

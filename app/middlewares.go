@@ -26,11 +26,11 @@ func getUserID(c *fiber.Ctx) error {
 	var userID int
 	var err error
 
-	if config.Config.Debug {
-		userID = 1
-	} else {
-		userID, err = strconv.Atoi(c.Get("X-Consumer-Username"))
-		if err != nil {
+	userID, err = strconv.Atoi(c.Get("X-Consumer-Username"))
+	if err != nil {
+		if config.Config.Debug {
+			userID = 1
+		} else {
 			return utils.Unauthorized("Unauthorized")
 		}
 	}

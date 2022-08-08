@@ -21,4 +21,6 @@ func (model BaseModel) GetID() int {
 }
 
 type Models interface {
+	PushToken | Message |
+		[]PushToken | []Message
 }
