@@ -1,8 +1,10 @@
 package message
 
 import (
+	"github.com/goccy/go-json"
 	"github.com/gofiber/fiber/v2"
 	. "notification/models"
+	. "notification/utils"
 )
 
 // ListMessages
@@ -22,6 +24,46 @@ func ListMessages(c *fiber.Ctx) error {
 	return c.JSON(messages)
 }
 
+// SendMessage
+// @Summary Send a message
+// @Description Send to multiple recipients and save to db, admin only.
+// @Tags Message
+// @Produce application/json
+// @Param json body CreateModel true "json"
+// @Router /messages [post]
+// @Success 201 {object} Message
+func SendMessage(c *fiber.Ctx) error {
+	var body CreateModel
+	err := ValidateBody(c, &body)
+	if err != nil {
+		return err
+	}
+
+	var data Map
+	err = json.Unmarshal(body.Data, &data)
+	if err != nil {
+		return err
+	}
+
+	message := Message{
+		Type:        body.Type,
+		Title:       body.Title,
+		Description: body.Description,
+		Data:        body.Data,
+		Recipients:  body.Recipients,
+	}
+	if message.Title == "" {
+		message.Title = generateTitle(body.Type)
+	}
+	if message.Description == "" {
+		message.Description = generateDescription(body.Type, data)
+	}
+
+	DB.Create(&message)
+
+	return c.Status(201).JSON(message)
+}
+
 // ClearMessages
 // @Summary Clear Messages of a User
 // @Tags Message
@@ -29,7 +71,10 @@ func ListMessages(c *fiber.Ctx) error {
 // @Router /messages/clear [post]
 // @Success 204
 func ClearMessages(c *fiber.Ctx) error {
-	result := DB.Exec("DELETE FROM message_user WHERE user_id = ?", c.Locals("userID").(int))
+	result := DB.Exec(
+		"DELETE FROM message_user WHERE user_id = ?",
+		c.Locals("userID").(int),
+	)
 	if result.Error != nil {
 		return result.Error
 	}

@@ -22,6 +22,7 @@ func ListTokens(c *fiber.Ctx) error {
 // @Summary Add Token of a User
 // @Tags Token
 // @Produce application/json
+// @Param json body CreateModel true "json"
 // @Router /users/push-tokens [post]
 // @Success 200 {object} PushToken
 func AddToken(c *fiber.Ctx) error {
@@ -49,6 +50,7 @@ func AddToken(c *fiber.Ctx) error {
 // @Summary Delete the token of a user's certain device
 // @Tags Token
 // @Produce application/json
+// @Param json body DeleteModel true "json"
 // @Router /users/push-tokens [delete]
 // @Success 204
 func DeleteToken(c *fiber.Ctx) error {

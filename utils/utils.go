@@ -1,8 +1,6 @@
 package utils
 
 import (
-	"strconv"
-
 	"github.com/gofiber/fiber/v2"
 )
 
@@ -10,22 +8,16 @@ type CanPreprocess interface {
 	Preprocess(c *fiber.Ctx) error
 }
 
-func Serialize(c *fiber.Ctx, obj CanPreprocess) error {
-	err := obj.Preprocess(c)
-	if err != nil {
-		return err
-	}
-	return c.JSON(obj)
+type numbers interface {
+	int | uint | int8 | uint8 |
+		int16 | uint16 | int32 | uint32 |
+		int64 | uint64 | float32 | float64
 }
 
-func ReText2IntArray(IDs [][]string) ([]int, error) {
-	ansIDs := make([]int, 0)
-	for _, v := range IDs {
-		id, err := strconv.Atoi(v[1])
-		if err != nil {
-			return nil, err
-		}
-		ansIDs = append(ansIDs, id)
+func Min[T numbers](x T, y T) T {
+	if x > y {
+		return y
+	} else {
+		return x
 	}
-	return ansIDs, nil
 }

@@ -7,9 +7,11 @@ import (
 
 type Message struct {
 	BaseModel
-	Type    MessageType    `json:"code" gorm:"size:16;not null"`
-	Message string         `json:"message" gorm:"size:64;not null"`
-	Data    datatypes.JSON `json:"data" gorm:"not null"`
+	Type        MessageType    `json:"code" gorm:"size:16;not null"`
+	Title       string         `json:"message" gorm:"size:32;not null"`
+	Description string         `json:"description" gorm:"size:64;not null"`
+	Data        datatypes.JSON `json:"data" gorm:"not null"`
+	Recipients  []int          `json:"recipients" gorm:"-:all" `
 }
 
 type MessageUser struct {
@@ -20,32 +22,22 @@ type MessageUser struct {
 type MessageType string
 
 const (
-	MessageTypeFavorite   MessageType = "favorite"
-	MessageTypeReply      MessageType = "reply"
-	MessageTypeMention    MessageType = "mention"
-	MessageTypeModify     MessageType = "modify" // including fold and delete
-	MessageTypeReport     MessageType = "report"
-	MessageTypePermission MessageType = "permission"
+	MessageTypeFavorite    MessageType = "favorite"
+	MessageTypeReply       MessageType = "reply"
+	MessageTypeMention     MessageType = "mention"
+	MessageTypeModify      MessageType = "modify" // including fold and delete
+	MessageTypePermission  MessageType = "permission"
+	MessageTypeReport      MessageType = "report"
+	MessageTypeReportDealt MessageType = "report_dealt"
 )
 
-func (m *Message) Create(userIDs []int) error {
-	return DB.Transaction(func(tx *gorm.DB) error {
-		if err := tx.Create(m).Error; err != nil {
-			return err
+func (m *Message) AfterCreate(tx *gorm.DB) (err error) {
+	mapping := make([]MessageUser, len(m.Recipients))
+	for i, userID := range m.Recipients {
+		mapping[i] = MessageUser{
+			MessageID: m.ID,
+			UserID:    userID,
 		}
-
-		mapping := make([]MessageUser, len(userIDs))
-		for i, userID := range userIDs {
-			mapping[i] = MessageUser{
-				MessageID: m.ID,
-				UserID:    userID,
-			}
-		}
-
-		if err := tx.Create(&mapping).Error; err != nil {
-			return err
-		}
-
-		return nil
-	})
+	}
+	return tx.Create(&mapping).Error
 }

@@ -58,6 +58,35 @@ const docTemplate = `{
                         }
                     }
                 }
+            },
+            "post": {
+                "description": "Send to multiple recipients and save to db, admin only.",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Message"
+                ],
+                "summary": "Send a message",
+                "parameters": [
+                    {
+                        "description": "json",
+                        "name": "json",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/message.CreateModel"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Created",
+                        "schema": {
+                            "$ref": "#/definitions/models.Message"
+                        }
+                    }
+                }
             }
         },
         "/messages/clear": {
@@ -130,6 +159,17 @@ const docTemplate = `{
                     "Token"
                 ],
                 "summary": "Add Token of a User",
+                "parameters": [
+                    {
+                        "description": "json",
+                        "name": "json",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/token.CreateModel"
+                        }
+                    }
+                ],
                 "responses": {
                     "200": {
                         "description": "OK",
@@ -147,6 +187,17 @@ const docTemplate = `{
                     "Token"
                 ],
                 "summary": "Delete the token of a user's certain device",
+                "parameters": [
+                    {
+                        "description": "json",
+                        "name": "json",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/token.DeleteModel"
+                        }
+                    }
+                ],
                 "responses": {
                     "204": {
                         "description": ""
@@ -156,6 +207,45 @@ const docTemplate = `{
         }
     },
     "definitions": {
+        "message.CreateModel": {
+            "type": "object",
+            "required": [
+                "recipients",
+                "type"
+            ],
+            "properties": {
+                "data": {
+                    "type": "array",
+                    "items": {
+                        "type": "integer"
+                    }
+                },
+                "description": {
+                    "type": "string"
+                },
+                "recipients": {
+                    "type": "array",
+                    "items": {
+                        "type": "integer"
+                    }
+                },
+                "title": {
+                    "type": "string"
+                },
+                "type": {
+                    "description": "message type, change \"oneof\" when MessageType changes",
+                    "type": "string",
+                    "enum": [
+                        "favorite",
+                        "reply",
+                        "mention",
+                        "modify",
+                        "report",
+                        "permission"
+                    ]
+                }
+            }
+        },
         "models.Message": {
             "type": "object",
             "properties": {
@@ -168,11 +258,20 @@ const docTemplate = `{
                         "type": "integer"
                     }
                 },
+                "description": {
+                    "type": "string"
+                },
                 "id": {
                     "type": "integer"
                 },
                 "message": {
                     "type": "string"
+                },
+                "recipients": {
+                    "type": "array",
+                    "items": {
+                        "type": "integer"
+                    }
                 },
                 "time_created": {
                     "type": "string"
@@ -207,6 +306,41 @@ const docTemplate = `{
                 },
                 "user_id": {
                     "type": "integer"
+                }
+            }
+        },
+        "token.CreateModel": {
+            "type": "object",
+            "required": [
+                "device_id",
+                "service",
+                "token"
+            ],
+            "properties": {
+                "device_id": {
+                    "type": "string",
+                    "maxLength": 64
+                },
+                "service": {
+                    "type": "string",
+                    "enum": [
+                        "apns",
+                        "fcm",
+                        "mipush"
+                    ]
+                },
+                "token": {
+                    "type": "string",
+                    "maxLength": 64
+                }
+            }
+        },
+        "token.DeleteModel": {
+            "type": "object",
+            "properties": {
+                "device_id": {
+                    "type": "string",
+                    "maxLength": 64
                 }
             }
         }

@@ -1,5 +1,33 @@
 basePath: /api
 definitions:
+  message.CreateModel:
+    properties:
+      data:
+        items:
+          type: integer
+        type: array
+      description:
+        type: string
+      recipients:
+        items:
+          type: integer
+        type: array
+      title:
+        type: string
+      type:
+        description: message type, change "oneof" when MessageType changes
+        enum:
+        - favorite
+        - reply
+        - mention
+        - modify
+        - report
+        - permission
+        type: string
+    required:
+    - recipients
+    - type
+    type: object
   models.Message:
     properties:
       code:
@@ -8,10 +36,16 @@ definitions:
         items:
           type: integer
         type: array
+      description:
+        type: string
       id:
         type: integer
       message:
         type: string
+      recipients:
+        items:
+          type: integer
+        type: array
       time_created:
         type: string
       time_updated:
@@ -34,6 +68,31 @@ definitions:
         type: string
       user_id:
         type: integer
+    type: object
+  token.CreateModel:
+    properties:
+      device_id:
+        maxLength: 64
+        type: string
+      service:
+        enum:
+        - apns
+        - fcm
+        - mipush
+        type: string
+      token:
+        maxLength: 64
+        type: string
+    required:
+    - device_id
+    - service
+    - token
+    type: object
+  token.DeleteModel:
+    properties:
+      device_id:
+        maxLength: 64
+        type: string
     type: object
 info:
   contact:
@@ -69,6 +128,25 @@ paths:
       summary: List Messages of a User
       tags:
       - Message
+    post:
+      description: Send to multiple recipients and save to db, admin only.
+      parameters:
+      - description: json
+        in: body
+        name: json
+        required: true
+        schema:
+          $ref: '#/definitions/message.CreateModel'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/models.Message'
+      summary: Send a message
+      tags:
+      - Message
   /messages/{id}:
     delete:
       parameters:
@@ -97,6 +175,13 @@ paths:
       - Message
   /users/push-tokens:
     delete:
+      parameters:
+      - description: json
+        in: body
+        name: json
+        required: true
+        schema:
+          $ref: '#/definitions/token.DeleteModel'
       produces:
       - application/json
       responses:
@@ -119,6 +204,13 @@ paths:
       tags:
       - Token
     post:
+      parameters:
+      - description: json
+        in: body
+        name: json
+        required: true
+        schema:
+          $ref: '#/definitions/token.CreateModel'
       produces:
       - application/json
       responses:

@@ -9,14 +9,15 @@ import (
 
 func init() {
 	for i := 0; i < 12; i++ {
-		message := Message{
-			Message: "message " + strconv.Itoa(i),
-			Type:    MessageTypeFavorite,
-			Data:    []byte("{}"),
-		}
 		userIDs := make([]int, 1)
 		userIDs[0] = i%3 + 1
-		err := message.Create(userIDs)
+		message := Message{
+			Title:      "message " + strconv.Itoa(i),
+			Type:       MessageTypeFavorite,
+			Data:       []byte("{}"),
+			Recipients: userIDs,
+		}
+		err := DB.Create(&message).Error
 		if err != nil {
 			panic(err)
 		}
@@ -26,6 +27,24 @@ func init() {
 func TestGetMessage(t *testing.T) {
 	messages := testAPIModel[[]Message](t, "get", "/api/messages", 200)
 	assert.GreaterOrEqual(t, 5, len(messages))
+}
+
+func TestAddMessage(t *testing.T) {
+	recipients := []int{1, 2}
+	data := Map{"type": MessageTypeReply, "recipients": recipients}
+	message := testAPIModel[Message](t, "post", "/api/messages", 201, data)
+	assert.Equal(t, MessageTypeReply, message.Type)
+	assert.Equal(t, recipients, message.Recipients)
+	assert.Equal(t, "你的帖子被回复了", message.Title)
+	assert.Equal(t, "", message.Description)
+
+	// test no recipients
+	data = Map{"type": MessageTypeFavorite}
+	testCommon(t, "post", "/api/messages", 400, data)
+
+	// test no type
+	data = Map{"recipients": recipients}
+	testCommon(t, "post", "/api/messages", 400, data)
 }
 
 func TestDeleteMessage(t *testing.T) {
