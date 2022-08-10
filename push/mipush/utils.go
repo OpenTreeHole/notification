@@ -47,9 +47,9 @@ func (s *Sender) getStatusCode() int {
 	if s.Response == nil {
 		return -1
 	}
-	code, ok := s.Response["code"].(int)
+	code, ok := s.Response["code"].(float64)
 	if !ok {
 		return -1
 	}
-	return code
+	return int(code)
 }

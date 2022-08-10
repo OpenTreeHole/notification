@@ -1,7 +1,6 @@
 package mipush
 
 import (
-	"bytes"
 	"fmt"
 	"github.com/goccy/go-json"
 	"net/http"
@@ -36,9 +35,17 @@ func (s *Sender) Send() bool {
 		"payload":                 url.QueryEscape(string(payload)),
 		"extra.notify_effect":     "1",
 	}
-	jsonData, _ := json.Marshal(data)
-	req, _ := http.NewRequest("POST", mipushURL, bytes.NewReader(jsonData))
+	form := url.Values{}
+	for k, v := range data {
+		form.Add(k, v)
+	}
+	req, _ := http.NewRequest(
+		"POST",
+		mipushURL,
+		strings.NewReader(form.Encode()),
+	)
 	req.Header.Set("Authorization", authorization)
+	req.Header.Add("Content-Type", "application/x-www-form-urlencoded")
 	resp, err := client.Do(req)
 
 	s.Response = readBody(resp.Body)
