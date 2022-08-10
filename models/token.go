@@ -16,6 +16,8 @@ const (
 	ServiceMipush
 )
 
+var PushServices = []PushService{ServiceAPNS, ServiceFCM, ServiceMipush}
+
 func (s PushService) String() string {
 	switch s {
 	case ServiceAPNS:

@@ -9,8 +9,6 @@ import (
 )
 
 func Create() *fiber.App {
-	utils.Logger, _ = utils.InitLog()
-
 	app := fiber.New(fiber.Config{
 		ErrorHandler: utils.MyErrorHandler,
 		JSONEncoder:  json.Marshal,

@@ -1,6 +1,7 @@
 package utils
 
 import (
+	"fmt"
 	"go.uber.org/zap"
 	"go.uber.org/zap/zapcore"
 	"notification/config"
@@ -8,7 +9,9 @@ import (
 
 var Logger *zap.Logger
 
-func InitLog() (*zap.Logger, error) {
+func init() {
+	fmt.Println("init logger")
+
 	var atomicLevel zapcore.Level
 	if config.Config.Debug {
 		atomicLevel = zapcore.DebugLevel
@@ -33,18 +36,10 @@ func InitLog() (*zap.Logger, error) {
 		OutputPaths:      []string{"stdout"},
 		ErrorOutputPaths: []string{"stderr"},
 	}
-	return logConfig.Build()
-}
 
-func MyLog(model string, action string, objectID, userID int, msg ...string) {
-	message := ""
-	for _, v := range msg {
-		message += v
+	var err error
+	Logger, err = logConfig.Build()
+	if err != nil {
+		panic(err)
 	}
-	Logger.Info(
-		model+""+action,
-		zap.Int("UserID", userID),
-		zap.Int("ID", objectID),
-		zap.String("Additional", message),
-	)
 }

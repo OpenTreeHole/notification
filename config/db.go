@@ -28,11 +28,13 @@ var gormConfig = &gorm.Config{
 
 func mysqlDB() (*gorm.DB, error) {
 	DBType = TypeMysql
+	fmt.Println("db type: mysql")
 	return gorm.Open(mysql.Open(Config.DbUrl), gormConfig)
 }
 
 func sqliteDB() (*gorm.DB, error) {
 	DBType = TypeSqlite
+	fmt.Println("db type: sqlite")
 	err := os.MkdirAll("data", 0750)
 	if err != nil {
 		panic(err)
@@ -42,6 +44,7 @@ func sqliteDB() (*gorm.DB, error) {
 
 func memoryDB() (*gorm.DB, error) {
 	DBType = TypeSqlite
+	fmt.Println("db type: memory")
 	return gorm.Open(sqlite.Open("file::memory:?cache=shared"), gormConfig)
 }
 

@@ -1,8 +1,7 @@
-package app
+package models
 
 import (
 	"fmt"
-	. "notification/models"
 )
 
 // models must be registered here to migrate into the database

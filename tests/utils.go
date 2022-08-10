@@ -2,7 +2,7 @@ package tests
 
 import (
 	"bytes"
-	"encoding/json"
+	"github.com/goccy/go-json"
 	"io/ioutil"
 	"net/http"
 	"notification/app"

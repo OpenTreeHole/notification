@@ -12,10 +12,14 @@ type MyConfig struct {
 	Mode             string `default:"dev" env:"MODE"`
 	Debug            bool   `default:"false" env:"DEBUG"`
 	MessagePurgeDays int    `default:"7" env:"MESSAGE_PURGE_DAYS"`
-	// example: user:pass@tcp(127.0.0.1:3306)/dbname
+	// example: user:pass@tcp(127.0.0.1:3306)/dbname?parseTime=true
 	// for more detail, see https://github.com/go-sql-driver/mysql#dsn-data-source-name
-	DbUrl    string `default:"" env:"DB_URL"`
-	RedisURL string `default:"redis:6379" env:"REDIS_URL"`
+	DbUrl string `default:"" env:"DB_URL"`
+	// in production mode, use docker secrets
+	MipushKeyPath      string `default:"data/mipush.pem" env:"MIPUSH_KEY_PATH"`
+	APNSKeyPath        string `default:"data/apns.pem" env:"APNS_KEY_PATH"`
+	IOSPackageName     string `default:"io.github.danxi-dev.dan-xi" env:"IOS_PACKAGE_NAME"`
+	AndroidPackageName string `default:"io.github.danxi_dev.dan_xi" env:"ANDROID_PACKAGE_NAME"`
 }
 
 var Config MyConfig

@@ -4,6 +4,7 @@ import (
 	"github.com/goccy/go-json"
 	"github.com/gofiber/fiber/v2"
 	. "notification/models"
+	"notification/push"
 	. "notification/utils"
 )
 
@@ -59,7 +60,12 @@ func SendMessage(c *fiber.Ctx) error {
 		message.Description = generateDescription(body.Type, data)
 	}
 
-	DB.Create(&message)
+	err = DB.Create(&message).Error
+	if err != nil {
+		return err
+	}
+
+	go push.Send(message)
 
 	return c.Status(201).JSON(message)
 }

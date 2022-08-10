@@ -3,21 +3,34 @@
 This is a notification microservice.
 
 ## Features
-To be done
+- support apns and mipush notifications 
+- REST API to manage notification and user device tokens
 
 ## Usage
 
+### Build
 ```shell
 git clone https://github.com/OpenTreeHole/notification.git
 cd notification
 # install swag and generate docs
 go install github.com/swaggo/swag/cmd/swag@latest
-swag init --parseInternal --parseDepth 1 # to generate the latest docs, this should be run before compiling
+swag init --parseInternal --parseDependency --parseDepth 1 # to generate the latest docs, this should be run before compiling
 # build and run
 go build -o notification.exe
 ./notification.exe
 ```
-For documentation, please open http://localhost:8000/docs after running app
+
+### Test
+Please export `MODE=test` and `BASE_PATH=$PWD`
+to avoid relative path errors in unit tests.
+
+Device tokens must be set to test push notifications, 
+export `${service}_DEVICE_TOKEN` for each push service, 
+e.g. `APNS_DEVICE_TOKEN=1234567`
+
+### API Docs
+Please visit http://localhost:8000/docs after running app
+
 ## Badge
 
 [//]: # ([![build]&#40;https://github.com/OpenTreeHole/notification/actions/workflows/master.yaml/badge.svg&#41;]&#40;https://github.com/OpenTreeHole/notification/actions/workflows/master.yaml&#41;)
