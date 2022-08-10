@@ -1,7 +1,6 @@
 package message
 
 import (
-	"github.com/goccy/go-json"
 	"github.com/gofiber/fiber/v2"
 	. "notification/models"
 	"notification/push"
@@ -40,24 +39,19 @@ func SendMessage(c *fiber.Ctx) error {
 		return err
 	}
 
-	var data Map
-	err = json.Unmarshal(body.Data, &data)
-	if err != nil {
-		return err
-	}
-
 	message := Message{
 		Type:        body.Type,
 		Title:       body.Title,
 		Description: body.Description,
 		Data:        body.Data,
+		URL:         body.URL,
 		Recipients:  body.Recipients,
 	}
 	if message.Title == "" {
 		message.Title = generateTitle(body.Type)
 	}
 	if message.Description == "" {
-		message.Description = generateDescription(body.Type, data)
+		message.Description = generateDescription(body.Type, body.Data)
 	}
 
 	err = DB.Create(&message).Error

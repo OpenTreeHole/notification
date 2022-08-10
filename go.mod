@@ -13,7 +13,6 @@ require (
 	github.com/swaggo/fiber-swagger v1.3.0
 	github.com/swaggo/swag v1.8.4
 	go.uber.org/zap v1.21.0
-	gorm.io/datatypes v1.0.7
 	gorm.io/driver/mysql v1.3.5
 	gorm.io/driver/sqlite v1.3.6
 	gorm.io/gorm v1.23.8

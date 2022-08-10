@@ -44,7 +44,7 @@ func TestPushNotification(t *testing.T) {
 		Type:        MessageTypeReply,
 		Title:       "title",
 		Description: "description",
-		Data:        []byte("{}"),
+		Data:        Map{},
 		Recipients:  []int{userID},
 	})
 	assert.True(t, success)

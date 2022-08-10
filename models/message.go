@@ -1,17 +1,17 @@
 package models
 
 import (
-	"gorm.io/datatypes"
 	"gorm.io/gorm"
 )
 
 type Message struct {
 	BaseModel
-	Type        MessageType    `json:"code" gorm:"size:16;not null"`
-	Title       string         `json:"message" gorm:"size:32;not null"`
-	Description string         `json:"description" gorm:"size:64;not null"`
-	Data        datatypes.JSON `json:"data" gorm:"not null"`
-	Recipients  []int          `json:"recipients" gorm:"-:all" `
+	Title       string      `json:"message" gorm:"size:32;not null"`
+	Description string      `json:"description" gorm:"size:64;not null"`
+	Data        JSON        `json:"data"`
+	Type        MessageType `json:"code" gorm:"size:16;not null"`
+	URL         string      `json:"url" gorm:"size:64;default:'';not null"`
+	Recipients  []int       `json:"-" gorm:"-:all" `
 }
 
 type MessageUser struct {

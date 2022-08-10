@@ -14,7 +14,7 @@ func init() {
 		message := Message{
 			Title:      "message " + strconv.Itoa(i),
 			Type:       MessageTypeFavorite,
-			Data:       []byte("{}"),
+			Data:       Map{},
 			Recipients: userIDs,
 		}
 		err := DB.Create(&message).Error
@@ -34,7 +34,8 @@ func TestAddMessage(t *testing.T) {
 	data := Map{"type": MessageTypeReply, "recipients": recipients}
 	message := testAPIModel[Message](t, "post", "/api/messages", 201, data)
 	assert.Equal(t, MessageTypeReply, message.Type)
-	assert.Equal(t, recipients, message.Recipients)
+	// don't return recipients
+	//assert.Equal(t, nil, message.Recipients)
 	assert.Equal(t, "你的帖子被回复了", message.Title)
 	assert.Equal(t, "", message.Description)
 

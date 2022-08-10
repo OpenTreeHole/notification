@@ -17,6 +17,7 @@ type Sender struct {
 func (s *Sender) New(message *Message, tokens []string) {
 	s.Message = message
 	s.Tokens = tokens
+	s.Message.Data["url"] = s.Message.URL
 }
 
 // Send sends notification.

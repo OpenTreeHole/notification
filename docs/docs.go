@@ -215,10 +215,7 @@ const docTemplate = `{
             ],
             "properties": {
                 "data": {
-                    "type": "array",
-                    "items": {
-                        "type": "integer"
-                    }
+                    "$ref": "#/definitions/models.JSON"
                 },
                 "description": {
                     "type": "string"
@@ -243,7 +240,16 @@ const docTemplate = `{
                         "report",
                         "permission"
                     ]
+                },
+                "url": {
+                    "type": "string"
                 }
+            }
+        },
+        "models.JSON": {
+            "type": "object",
+            "additionalProperties": {
+                "type": "any"
             }
         },
         "models.Message": {
@@ -253,10 +259,7 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "data": {
-                    "type": "array",
-                    "items": {
-                        "type": "integer"
-                    }
+                    "$ref": "#/definitions/models.JSON"
                 },
                 "description": {
                     "type": "string"
@@ -267,16 +270,13 @@ const docTemplate = `{
                 "message": {
                     "type": "string"
                 },
-                "recipients": {
-                    "type": "array",
-                    "items": {
-                        "type": "integer"
-                    }
-                },
                 "time_created": {
                     "type": "string"
                 },
                 "time_updated": {
+                    "type": "string"
+                },
+                "url": {
                     "type": "string"
                 }
             }

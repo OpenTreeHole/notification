@@ -207,10 +207,7 @@
             ],
             "properties": {
                 "data": {
-                    "type": "array",
-                    "items": {
-                        "type": "integer"
-                    }
+                    "$ref": "#/definitions/models.JSON"
                 },
                 "description": {
                     "type": "string"
@@ -235,7 +232,16 @@
                         "report",
                         "permission"
                     ]
+                },
+                "url": {
+                    "type": "string"
                 }
+            }
+        },
+        "models.JSON": {
+            "type": "object",
+            "additionalProperties": {
+                "type": "any"
             }
         },
         "models.Message": {
@@ -245,10 +251,7 @@
                     "type": "string"
                 },
                 "data": {
-                    "type": "array",
-                    "items": {
-                        "type": "integer"
-                    }
+                    "$ref": "#/definitions/models.JSON"
                 },
                 "description": {
                     "type": "string"
@@ -259,16 +262,13 @@
                 "message": {
                     "type": "string"
                 },
-                "recipients": {
-                    "type": "array",
-                    "items": {
-                        "type": "integer"
-                    }
-                },
                 "time_created": {
                     "type": "string"
                 },
                 "time_updated": {
+                    "type": "string"
+                },
+                "url": {
                     "type": "string"
                 }
             }

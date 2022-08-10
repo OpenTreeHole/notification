@@ -18,14 +18,10 @@ type Sender struct {
 }
 
 func (s *Sender) Send() bool {
-	var messageData Map
-	err := json.Unmarshal(s.Message.Data, &messageData)
-	if err != nil {
-		Logger.Error("Unmarshal message data error: " + err.Error())
-	}
 	payload, _ := json.Marshal(&Map{
-		"data": messageData,
+		"data": s.Message.Data,
 		"code": s.Message.Type,
+		"url":  s.Message.URL,
 	})
 	data := map[string]string{
 		"registration_id":         strings.Join(s.Tokens, ","),

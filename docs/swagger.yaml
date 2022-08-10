@@ -3,9 +3,7 @@ definitions:
   message.CreateModel:
     properties:
       data:
-        items:
-          type: integer
-        type: array
+        $ref: '#/definitions/models.JSON'
       description:
         type: string
       recipients:
@@ -24,31 +22,33 @@ definitions:
         - report
         - permission
         type: string
+      url:
+        type: string
     required:
     - recipients
     - type
+    type: object
+  models.JSON:
+    additionalProperties:
+      type: any
     type: object
   models.Message:
     properties:
       code:
         type: string
       data:
-        items:
-          type: integer
-        type: array
+        $ref: '#/definitions/models.JSON'
       description:
         type: string
       id:
         type: integer
       message:
         type: string
-      recipients:
-        items:
-          type: integer
-        type: array
       time_created:
         type: string
       time_updated:
+        type: string
+      url:
         type: string
     type: object
   models.MessageModel:
