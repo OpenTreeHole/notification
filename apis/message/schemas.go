@@ -7,7 +7,7 @@ import (
 
 type CreateModel struct {
 	// message type, change "oneof" when MessageType changes
-	Type        MessageType `json:"type" validate:"required,oneof=favorite reply mention modify report permission"`
+	Type        MessageType `json:"type" validate:"required,oneof=favorite reply mention modify report permission report_dealt"`
 	Title       string      `json:"title"`
 	Description string      `json:"description"`
 	Data        JSON        `json:"data"`
