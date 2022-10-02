@@ -49,3 +49,9 @@ func TestPushNotification(t *testing.T) {
 	})
 	assert.True(t, success)
 }
+
+//func TestManualSend(t *testing.T) {
+//	tokens := []string{}
+//	message := ""
+//	manualSend(ServiceAPNS, message, tokens)
+//}
