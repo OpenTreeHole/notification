@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"github.com/sideshow/apns2"
 	"notification/config"
+	. "notification/models"
 	"notification/push/base"
 	"notification/utils"
 	"strings"
@@ -20,7 +21,7 @@ func (s *Sender) Send() bool {
 		res, err := client.Push(&apns2.Notification{
 			DeviceToken: token,
 			Topic:       config.Config.IOSPackageName,
-			Payload:     s.Message.Data,
+			Payload:     constructPayload(s.Message),
 		})
 		if err != nil {
 			utils.Logger.Error("APNS push error: " + err.Error())
@@ -41,4 +42,13 @@ func (s *Sender) Send() bool {
 	}
 
 	return success
+}
+
+func constructPayload(message *Message) any {
+	return Map{"aps": Map{"alert": Map{
+		"title":    message.Title,
+		"subtitle": message.Description,
+		"body":     message.Data,
+	}}}
+
 }
