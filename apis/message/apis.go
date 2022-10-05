@@ -81,6 +81,16 @@ func ClearMessages(c *fiber.Ctx) error {
 	return c.Status(204).JSON(nil)
 }
 
+// ClearMessagesDeprecated
+// @Summary Clear Messages Deprecated
+// @Tags Message
+// @Produce application/json
+// @Router /messages [put]
+// @Success 204
+func ClearMessagesDeprecated(c *fiber.Ctx) error {
+	return ClearMessages(c)
+}
+
 // DeleteMessage
 // @Summary Delete a message of a user
 // @Tags Message

@@ -6,5 +6,6 @@ func RegisterRoutes(app fiber.Router) {
 	app.Get("/messages", ListMessages)
 	app.Post("/messages", SendMessage)
 	app.Post("/messages/clear", ClearMessages)
+	app.Put("/messages", ClearMessagesDeprecated)
 	app.Delete("/messages/:id", DeleteMessage)
 }
