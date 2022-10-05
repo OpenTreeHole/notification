@@ -15,7 +15,7 @@ import (
 // @Router /messages [get]
 // @Success 200 {array} Message
 func ListMessages(c *fiber.Ctx) error {
-	var messages []Message
+	var messages Messages
 	DB.Raw(`
 		SELECT * FROM message
 		INNER JOIN message_user ON message.id = message_user.message_id 
@@ -23,7 +23,7 @@ func ListMessages(c *fiber.Ctx) error {
 		ORDER BY updated_at DESC`,
 		c.Locals("userID").(int),
 	).Scan(&messages)
-	return c.JSON(messages)
+	return Serialize(c, &messages)
 }
 
 // SendMessage
@@ -63,7 +63,7 @@ func SendMessage(c *fiber.Ctx) error {
 
 	go push.Send(message)
 
-	return c.Status(201).JSON(message)
+	return Serialize(c.Status(201), &message)
 }
 
 // ClearMessages

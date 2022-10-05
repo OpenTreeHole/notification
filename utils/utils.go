@@ -1,9 +1,10 @@
 package utils
 
 import (
-	"github.com/gofiber/fiber/v2"
 	"os"
 	"path"
+
+	"github.com/gofiber/fiber/v2"
 )
 
 type CanPreprocess interface {
@@ -41,4 +42,12 @@ func ToAbsolutePath(relativePath string) string {
 		return relativePath
 	}
 	return path.Join(basePath, relativePath)
+}
+
+func Serialize(c *fiber.Ctx, obj CanPreprocess) error {
+	err := obj.Preprocess(c)
+	if err != nil {
+		return err
+	}
+	return c.JSON(obj)
 }
