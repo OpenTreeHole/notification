@@ -1,10 +1,11 @@
 package message
 
 import (
-	"github.com/gofiber/fiber/v2"
 	. "notification/models"
 	"notification/push"
 	. "notification/utils"
+
+	"github.com/gofiber/fiber/v2"
 )
 
 // ListMessages
@@ -18,7 +19,8 @@ func ListMessages(c *fiber.Ctx) error {
 	DB.Raw(`
 		SELECT * FROM message
 		INNER JOIN message_user ON message.id = message_user.message_id 
-		WHERE message_user.user_id = ?`,
+		WHERE message_user.user_id = ?
+		ORDER BY updated_at DESC`,
 		c.Locals("userID").(int),
 	).Scan(&messages)
 	return c.JSON(messages)
