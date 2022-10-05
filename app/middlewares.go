@@ -2,7 +2,6 @@ package app
 
 import (
 	"notification/config"
-	"notification/utils"
 	"strconv"
 
 	"github.com/gofiber/fiber/v2"
@@ -30,9 +29,8 @@ func getUserID(c *fiber.Ctx) error {
 	if err != nil {
 		if config.Config.Debug {
 			userID = 1
-		} else {
-			return utils.Unauthorized("Unauthorized")
 		}
+		// do not return error if user is not logged in
 	}
 
 	c.Locals("userID", userID)

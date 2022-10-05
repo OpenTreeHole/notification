@@ -1,10 +1,11 @@
 package message
 
 import (
-	"github.com/gofiber/fiber/v2"
 	. "notification/models"
 	"notification/push"
 	. "notification/utils"
+
+	"github.com/gofiber/fiber/v2"
 )
 
 // ListMessages
@@ -14,14 +15,15 @@ import (
 // @Router /messages [get]
 // @Success 200 {array} Message
 func ListMessages(c *fiber.Ctx) error {
-	var messages []Message
+	var messages Messages
 	DB.Raw(`
 		SELECT * FROM message
 		INNER JOIN message_user ON message.id = message_user.message_id 
-		WHERE message_user.user_id = ?`,
+		WHERE message_user.user_id = ?
+		ORDER BY updated_at DESC`,
 		c.Locals("userID").(int),
 	).Scan(&messages)
-	return c.JSON(messages)
+	return Serialize(c, &messages)
 }
 
 // SendMessage
@@ -61,7 +63,7 @@ func SendMessage(c *fiber.Ctx) error {
 
 	go push.Send(message)
 
-	return c.Status(201).JSON(message)
+	return Serialize(c.Status(201), &message)
 }
 
 // ClearMessages
@@ -79,6 +81,16 @@ func ClearMessages(c *fiber.Ctx) error {
 		return result.Error
 	}
 	return c.Status(204).JSON(nil)
+}
+
+// ClearMessagesDeprecated
+// @Summary Clear Messages Deprecated
+// @Tags Message
+// @Produce application/json
+// @Router /messages [put]
+// @Success 204
+func ClearMessagesDeprecated(c *fiber.Ctx) error {
+	return ClearMessages(c)
 }
 
 // DeleteMessage
