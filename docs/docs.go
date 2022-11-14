@@ -59,6 +59,20 @@ const docTemplate = `{
                     }
                 }
             },
+            "put": {
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Message"
+                ],
+                "summary": "Clear Messages Deprecated",
+                "responses": {
+                    "204": {
+                        "description": "No Content"
+                    }
+                }
+            },
             "post": {
                 "description": "Send to multiple recipients and save to db, admin only.",
                 "produces": [
@@ -100,7 +114,7 @@ const docTemplate = `{
                 "summary": "Clear Messages of a User",
                 "responses": {
                     "204": {
-                        "description": ""
+                        "description": "No Content"
                     }
                 }
             }
@@ -125,7 +139,7 @@ const docTemplate = `{
                 ],
                 "responses": {
                     "204": {
-                        "description": ""
+                        "description": "No Content"
                     }
                 }
             }
@@ -200,7 +214,7 @@ const docTemplate = `{
                 ],
                 "responses": {
                     "204": {
-                        "description": ""
+                        "description": "No Content"
                     }
                 }
             }
@@ -238,7 +252,8 @@ const docTemplate = `{
                         "mention",
                         "modify",
                         "report",
-                        "permission"
+                        "permission",
+                        "report_dealt"
                     ]
                 },
                 "url": {
@@ -248,9 +263,7 @@ const docTemplate = `{
         },
         "models.JSON": {
             "type": "object",
-            "additionalProperties": {
-                "type": "any"
-            }
+            "additionalProperties": {}
         },
         "models.Message": {
             "type": "object",
@@ -264,11 +277,19 @@ const docTemplate = `{
                 "description": {
                     "type": "string"
                 },
+                "has_read": {
+                    "description": "兼容旧版",
+                    "type": "boolean"
+                },
                 "id": {
                     "type": "integer"
                 },
                 "message": {
                     "type": "string"
+                },
+                "message_id": {
+                    "description": "兼容旧版 id",
+                    "type": "integer"
                 },
                 "time_created": {
                     "type": "string"
@@ -294,9 +315,6 @@ const docTemplate = `{
             "properties": {
                 "device_id": {
                     "type": "string"
-                },
-                "id": {
-                    "type": "integer"
                 },
                 "service": {
                     "type": "integer"

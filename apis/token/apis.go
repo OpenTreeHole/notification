@@ -38,7 +38,7 @@ func AddToken(c *fiber.Ctx) error {
 		DeviceID: body.DeviceID,
 		Token:    body.Token,
 	}
-	result := DB.Create(&token)
+	result := DB.Save(&token)
 	if result.Error != nil {
 		return result.Error
 	}

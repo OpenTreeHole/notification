@@ -2,10 +2,10 @@ package mipush
 
 import (
 	"fmt"
-	"io/ioutil"
 	"net/http"
 	"notification/config"
 	"notification/utils"
+	"os"
 	"time"
 )
 
@@ -24,7 +24,7 @@ func init() {
 
 func getMipushKey() string {
 	keyPath := utils.ToAbsolutePath(config.Config.MipushKeyPath)
-	data, err := ioutil.ReadFile(keyPath)
+	data, err := os.ReadFile(keyPath)
 	if err != nil {
 		panic(err)
 	}

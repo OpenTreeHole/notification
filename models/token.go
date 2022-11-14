@@ -1,11 +1,10 @@
 package models
 
 type PushToken struct {
-	ID       int         `json:"id" gorm:"primarykey"`
-	UserID   int         `json:"user_id" gorm:"index;not null"`
+	UserID   int         `json:"user_id" gorm:"primaryKey;not null"`
 	Service  PushService `json:"service" gorm:"not null"`
-	DeviceID string      `json:"device_id" gorm:"size:64;not null"`
-	Token    string      `json:"token" gorm:"size:64;not null"`
+	DeviceID string      `json:"device_id" gorm:"primaryKey;not null"`
+	Token    string      `json:"token" gorm:"not null"`
 }
 
 type PushService uint8

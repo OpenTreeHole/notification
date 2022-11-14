@@ -21,6 +21,7 @@ definitions:
         - modify
         - report
         - permission
+        - report_dealt
         type: string
       url:
         type: string
@@ -29,8 +30,7 @@ definitions:
     - type
     type: object
   models.JSON:
-    additionalProperties:
-      type: any
+    additionalProperties: {}
     type: object
   models.Message:
     properties:
@@ -40,10 +40,16 @@ definitions:
         $ref: '#/definitions/models.JSON'
       description:
         type: string
+      has_read:
+        description: 兼容旧版
+        type: boolean
       id:
         type: integer
       message:
         type: string
+      message_id:
+        description: 兼容旧版 id
+        type: integer
       time_created:
         type: string
       time_updated:
@@ -60,8 +66,6 @@ definitions:
     properties:
       device_id:
         type: string
-      id:
-        type: integer
       service:
         type: integer
       token:
@@ -147,6 +151,15 @@ paths:
       summary: Send a message
       tags:
       - Message
+    put:
+      produces:
+      - application/json
+      responses:
+        "204":
+          description: No Content
+      summary: Clear Messages Deprecated
+      tags:
+      - Message
   /messages/{id}:
     delete:
       parameters:
@@ -159,7 +172,7 @@ paths:
       - application/json
       responses:
         "204":
-          description: ""
+          description: No Content
       summary: Delete a message of a user
       tags:
       - Message
@@ -169,7 +182,7 @@ paths:
       - application/json
       responses:
         "204":
-          description: ""
+          description: No Content
       summary: Clear Messages of a User
       tags:
       - Message
@@ -186,7 +199,7 @@ paths:
       - application/json
       responses:
         "204":
-          description: ""
+          description: No Content
       summary: Delete the token of a user's certain device
       tags:
       - Token
