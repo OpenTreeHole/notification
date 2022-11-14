@@ -15,7 +15,7 @@ import (
 // @Router /messages [get]
 // @Success 200 {array} Message
 func ListMessages(c *fiber.Ctx) error {
-	var messages Messages
+	messages := Messages{}
 	DB.Raw(`
 		SELECT * FROM message
 		INNER JOIN message_user ON message.id = message_user.message_id 
