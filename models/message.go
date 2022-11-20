@@ -20,8 +20,9 @@ type Message struct {
 }
 
 type MessageUser struct {
-	MessageID int `json:"message_id" gorm:"primaryKey"`
-	UserID    int `json:"user_id" gorm:"primaryKey"`
+	MessageID int  `json:"message_id" gorm:"primaryKey"`
+	UserID    int  `json:"user_id" gorm:"primaryKey"`
+	HasRead   bool `json:"has_read" gorm:"default:false"` // 兼容旧版
 }
 
 type MessageType string
@@ -48,6 +49,10 @@ func (messages Messages) Preprocess(c *fiber.Ctx) error {
 
 func (message *Message) Preprocess(c *fiber.Ctx) error {
 	message.MessageID = message.ID
+	DB.Raw(`
+		SELECT has_read FROM message_user WHERE user_id = ? AND message_id = ?`,
+		c.Locals("userID").(int), message.ID,
+	).Scan(&message.HasRead)
 	return nil
 }
 
