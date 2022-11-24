@@ -74,7 +74,7 @@ func SendMessage(c *fiber.Ctx) error {
 // @Success 204
 func ClearMessages(c *fiber.Ctx) error {
 	result := DB.Exec(
-		"DELETE FROM message_user WHERE user_id = ?",
+		"UPDATE message_user SET has_read = true WHERE user_id = ?",
 		c.Locals("userID").(int),
 	)
 	if result.Error != nil {
@@ -103,7 +103,7 @@ func ClearMessagesDeprecated(c *fiber.Ctx) error {
 func DeleteMessage(c *fiber.Ctx) error {
 	id, _ := c.ParamsInt("id")
 	result := DB.Exec(
-		"DELETE FROM message_user WHERE user_id = ? AND message_id = ?",
+		"UPDATE message_user SET has_read = true WHERE user_id = ?  AND message_id = ?",
 		c.Locals("userID").(int), id,
 	)
 	if result.Error != nil {
