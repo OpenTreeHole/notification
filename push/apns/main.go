@@ -23,11 +23,10 @@ func (s *Sender) Send() bool {
 			Topic:       config.Config.IOSPackageName,
 			Payload:     constructPayload(s.Message),
 		})
-		if err != nil {
+		if err != nil || res == nil {
 			utils.Logger.Error("APNS push error: " + err.Error())
 			success = false
-		}
-		if res.StatusCode != 200 {
+		} else if res.StatusCode != 200 {
 			utils.Logger.Warn(fmt.Sprintf(
 				"APNS push failed: %d %s",
 				res.StatusCode, res.Reason,
@@ -37,8 +36,9 @@ func (s *Sender) Send() bool {
 				s.ExpiredTokens = append(s.ExpiredTokens, token)
 			}
 			success = false
+		} else {
+			utils.Logger.Debug("APNS push success for " + token)
 		}
-		utils.Logger.Debug("APNS push success for " + token)
 	}
 
 	return success
