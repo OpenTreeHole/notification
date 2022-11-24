@@ -1,8 +1,9 @@
 package message
 
 import (
-	"github.com/creasty/defaults"
 	. "notification/models"
+
+	"github.com/creasty/defaults"
 )
 
 type CreateModel struct {
@@ -13,6 +14,10 @@ type CreateModel struct {
 	Data        JSON        `json:"data"`
 	URL         string      `json:"url"`
 	Recipients  []int       `json:"recipients" validate:"required"`
+}
+
+type ListModel struct {
+	NotRead bool `default:"false" query:"not_read"`
 }
 
 func (body *CreateModel) SetDefaults() {

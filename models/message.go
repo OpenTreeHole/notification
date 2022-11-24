@@ -16,7 +16,7 @@ type Message struct {
 	URL         string      `json:"url" gorm:"size:64;default:'';not null"`
 	Recipients  []int       `json:"-" gorm:"-:all" `
 	MessageID   int         `json:"message_id" gorm:"-:all"`       // 兼容旧版 id
-	HasRead     bool        `json:"has_read" gorm:"default:false"` // 兼容旧版
+	HasRead     bool        `json:"has_read" gorm:"default:false"` // 兼容旧版, 永远为false，以MessageUser的HasRead为准
 }
 
 type MessageUser struct {
@@ -49,10 +49,6 @@ func (messages Messages) Preprocess(c *fiber.Ctx) error {
 
 func (message *Message) Preprocess(c *fiber.Ctx) error {
 	message.MessageID = message.ID
-	DB.Raw(`
-		SELECT has_read FROM message_user WHERE user_id = ? AND message_id = ?`,
-		c.Locals("userID").(int), message.ID,
-	).Scan(&message.HasRead)
 	return nil
 }
 

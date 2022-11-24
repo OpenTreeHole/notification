@@ -14,15 +14,35 @@ import (
 // @Produce application/json
 // @Router /messages [get]
 // @Success 200 {array} Message
+// @Param object query ListModel false "query"
 func ListMessages(c *fiber.Ctx) error {
+	// swagger里面的query是错误的，应该使用not_read而不是notRead
+	var query ListModel
+	err := ValidateQuery(c, &query)
+	if err != nil {
+		return err
+	}
+
 	messages := Messages{}
-	DB.Raw(`
-		SELECT * FROM message
-		INNER JOIN message_user ON message.id = message_user.message_id 
-		WHERE message_user.user_id = ?
-		ORDER BY updated_at DESC`,
-		c.Locals("userID").(int),
-	).Scan(&messages)
+
+	if query.NotRead {
+		DB.Raw(`
+			SELECT message.*,message_user.has_read FROM message
+			INNER JOIN message_user 
+			WHERE message.id = message_user.message_id and message_user.user_id = ? and message_user.has_read = false
+			ORDER BY updated_at DESC`,
+			c.Locals("userID").(int),
+		).Scan(&messages)
+	} else {
+		DB.Raw(`
+			SELECT message.*,message_user.has_read FROM message
+			INNER JOIN message_user
+			WHERE message.id = message_user.message_id and message_user.user_id = ?
+			ORDER BY updated_at DESC`,
+			c.Locals("userID").(int),
+		).Scan(&messages)
+	}
+
 	return Serialize(c, &messages)
 }
 
