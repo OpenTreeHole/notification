@@ -9,9 +9,8 @@ import (
 )
 
 type MyConfig struct {
-	Mode             string `default:"dev" env:"MODE"`
-	Debug            bool   `default:"false" env:"DEBUG"`
-	MessagePurgeDays int    `default:"7" env:"MESSAGE_PURGE_DAYS"`
+	Mode  string `default:"dev" env:"MODE"`
+	Debug bool   `default:"false" env:"DEBUG"`
 	// example: user:pass@tcp(127.0.0.1:3306)/dbname?parseTime=true
 	// for more detail, see https://github.com/go-sql-driver/mysql#dsn-data-source-name
 	DbUrl string `default:"" env:"DB_URL"`

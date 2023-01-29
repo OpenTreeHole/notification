@@ -1,9 +1,10 @@
 package app
 
 import (
-	"github.com/goccy/go-json"
 	"notification/apis"
 	"notification/utils"
+
+	"github.com/goccy/go-json"
 
 	"github.com/gofiber/fiber/v2"
 )
@@ -16,8 +17,6 @@ func Create() *fiber.App {
 	})
 	RegisterMiddlewares(app)
 	apis.RegisterRoutes(app)
-
-	startTasks()
 
 	return app
 }
