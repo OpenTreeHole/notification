@@ -3,11 +3,12 @@ package models
 
 import (
 	"database/sql/driver"
+	"notification/config"
+	"time"
+
 	"github.com/goccy/go-json"
 	"gorm.io/gorm"
 	"gorm.io/gorm/schema"
-	"notification/config"
-	"time"
 )
 
 var DB = config.DB
@@ -25,8 +26,7 @@ func (model BaseModel) GetID() int {
 }
 
 type Models interface {
-	PushToken | Message |
-		[]PushToken | []Message
+	PushToken | []PushToken
 }
 
 type JSON map[string]any
@@ -45,6 +45,7 @@ func (JSON) GormDataType() string {
 }
 
 // GormDBDataType gorm db data type
+//
 //goland:noinspection GoUnusedParameter
 func (JSON) GormDBDataType(db *gorm.DB, field *schema.Field) string {
 	switch db.Dialector.Name() {
