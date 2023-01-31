@@ -2,11 +2,12 @@ package push
 
 import (
 	"fmt"
-	"github.com/stretchr/testify/assert"
 	. "notification/models"
 	"os"
 	"strings"
 	"testing"
+
+	"github.com/stretchr/testify/assert"
 )
 
 const userID = 1
@@ -41,7 +42,7 @@ func init() {
 
 func TestPushNotification(t *testing.T) {
 	success := Send(Message{
-		Type:        MessageTypeReply,
+		Type:        "reply",
 		Title:       "title",
 		Description: "description",
 		Data:        Map{},
