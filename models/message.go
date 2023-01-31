@@ -9,14 +9,14 @@ type Messages []Message
 
 type Message struct {
 	BaseModel
-	Title       string      `json:"message" gorm:"size:32;not null"`
-	Description string      `json:"description" gorm:"size:64;not null"`
-	Data        JSON        `json:"data"`
-	Type        MessageType `json:"code" gorm:"size:16;not null"`
-	URL         string      `json:"url" gorm:"size:64;default:'';not null"`
-	Recipients  []int       `json:"-" gorm:"-:all" `
-	MessageID   int         `json:"message_id" gorm:"-:all"`       // 兼容旧版 id
-	HasRead     bool        `json:"has_read" gorm:"default:false"` // 兼容旧版, 永远为false，以MessageUser的HasRead为准
+	Title       string `json:"message" gorm:"size:32;not null"`
+	Description string `json:"description" gorm:"size:64;not null"`
+	Data        JSON   `json:"data"`
+	Type        string `json:"code" gorm:"size:16;not null"`
+	URL         string `json:"url" gorm:"size:64;default:'';not null"`
+	Recipients  []int  `json:"-" gorm:"-:all" `
+	MessageID   int    `json:"message_id" gorm:"-:all"`       // 兼容旧版 id
+	HasRead     bool   `json:"has_read" gorm:"default:false"` // 兼容旧版, 永远为false，以MessageUser的HasRead为准
 }
 
 type MessageUser struct {
@@ -24,18 +24,6 @@ type MessageUser struct {
 	UserID    int  `json:"user_id" gorm:"primaryKey"`
 	HasRead   bool `json:"has_read" gorm:"default:false"` // 兼容旧版
 }
-
-type MessageType string
-
-const (
-	MessageTypeFavorite    MessageType = "favorite"
-	MessageTypeReply       MessageType = "reply"
-	MessageTypeMention     MessageType = "mention"
-	MessageTypeModify      MessageType = "modify" // including fold and delete
-	MessageTypePermission  MessageType = "permission"
-	MessageTypeReport      MessageType = "report"
-	MessageTypeReportDealt MessageType = "report_dealt"
-)
 
 func (messages Messages) Preprocess(c *fiber.Ctx) error {
 	for i := 0; i < len(messages); i++ {

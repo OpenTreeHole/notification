@@ -31,12 +31,6 @@ func SendMessage(c *fiber.Ctx) error {
 		URL:         body.URL,
 		Recipients:  body.Recipients,
 	}
-	if message.Title == "" {
-		message.Title = generateTitle(body.Type)
-	}
-	if message.Description == "" {
-		message.Description = generateDescription(body.Type, body.Data)
-	}
 
 	go push.Send(message)
 
