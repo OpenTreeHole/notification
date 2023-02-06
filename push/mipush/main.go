@@ -17,7 +17,7 @@ type Sender struct {
 	Response Map
 }
 
-func (s *Sender) Send() bool {
+func (s *Sender) Send() {
 	payload, _ := json.Marshal(&Map{
 		"data": s.Message.Data,
 		"code": s.Message.Type,
@@ -49,19 +49,20 @@ func (s *Sender) Send() bool {
 
 	if err != nil {
 		log.Printf("error sending mipush: %s\n", err)
-		return false
-	} else {
-		s.Response = readBody(resp.Body)
-		if resp.StatusCode != 200 || s.getStatusCode() != 0 {
-			log.Println("failed sending mipush")
-			fmt.Println(s.Response)
-			return false
-		}
+		return
 	}
-	return true
+
+	s.Response = readBody(resp.Body)
+	if resp.StatusCode != 200 || s.getStatusCode() != 0 {
+		log.Println("failed sending mipush")
+		fmt.Println(s.Response)
+	}
 }
 
 func (s *Sender) Clear() {
+	if s.Response == nil {
+		return
+	}
 	s.ExpiredTokens = getExpiredTokens(s.Response)
 	s.Sender.Clear()
 }

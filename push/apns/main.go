@@ -13,9 +13,7 @@ type Sender struct {
 	base.Sender
 }
 
-func (s *Sender) Send() bool {
-	var success = true
-
+func (s *Sender) Send() {
 	for _, token := range s.Tokens {
 		res, err := client.Push(&apns2.Notification{
 			DeviceToken: token,
@@ -23,22 +21,18 @@ func (s *Sender) Send() bool {
 			Payload:     constructPayload(s.Message),
 		})
 		if err != nil || res == nil {
-			log.Printf("APNS push error: %s", err.Error())
-			success = false
-		} else if res.StatusCode != 200 {
-			log.Printf("APNS push failed: %d %s",
+			log.Printf("APNS push error: %s\n", err)
+			return
+		}
+		if res.StatusCode != 200 {
+			log.Printf("APNS push failed: %d %s\n",
 				res.StatusCode, res.Reason)
 			if strings.Contains(res.Reason, "DeviceToken") {
 				// device token is expired, remove it from database
 				s.ExpiredTokens = append(s.ExpiredTokens, token)
 			}
-			success = false
-		} else {
-			log.Printf("APNS push success for %s", token)
 		}
 	}
-
-	return success
 }
 
 func constructPayload(message *Message) any {

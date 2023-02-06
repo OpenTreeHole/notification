@@ -21,7 +21,7 @@ func CreateSender(service PushService) Sender {
 	}
 }
 
-func Send(message Message) bool {
+func Send(message Message) {
 	var pushTokens []PushToken
 	DB.Where("user_id IN ?", message.Recipients).Find(&pushTokens)
 	serviceTokenMapping := make(map[PushService][]string)
@@ -32,7 +32,6 @@ func Send(message Message) bool {
 		)
 	}
 
-	var success = true
 	for _, service := range PushServices {
 		tokens, ok := serviceTokenMapping[service]
 		if !ok {
@@ -41,8 +40,7 @@ func Send(message Message) bool {
 
 		sender := CreateSender(service)
 		sender.New(&message, tokens)
-		success = sender.Send() && success
+		sender.Send()
 		sender.Clear()
 	}
-	return success
 }
