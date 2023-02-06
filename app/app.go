@@ -11,6 +11,7 @@ import (
 
 func Create() *fiber.App {
 	app := fiber.New(fiber.Config{
+		AppName:      "notification",
 		ErrorHandler: utils.MyErrorHandler,
 		JSONEncoder:  json.Marshal,
 		JSONDecoder:  json.Unmarshal,
