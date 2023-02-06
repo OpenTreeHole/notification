@@ -4,9 +4,12 @@ import (
 	"gorm.io/driver/mysql"
 	"gorm.io/driver/sqlite"
 	"gorm.io/gorm"
+	"gorm.io/gorm/logger"
 	"gorm.io/gorm/schema"
+	"log"
 	"notification/config"
 	"os"
+	"time"
 )
 
 var DB *gorm.DB
@@ -16,6 +19,15 @@ var gormConfig = &gorm.Config{
 		SingularTable: true, // use singular table name, table for `User` would be `user` with this option enabled
 	},
 	PrepareStmt: true, // use PrepareStmt for `Save`, `Update` and `Delete`
+	Logger: logger.New(
+		log.Default(),
+		logger.Config{
+			SlowThreshold:             time.Second,  // 慢 SQL 阈值
+			LogLevel:                  logger.Error, // 日志级别
+			IgnoreRecordNotFoundError: true,         // 忽略ErrRecordNotFound（记录未找到）错误
+			Colorful:                  false,        // 禁用彩色打印
+		},
+	),
 }
 
 func mysqlDB() (*gorm.DB, error) {
