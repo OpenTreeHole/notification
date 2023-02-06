@@ -3,6 +3,7 @@ module notification
 go 1.18
 
 require (
+	github.com/caarlos0/env/v6 v6.10.1
 	github.com/creasty/defaults v1.6.0
 	github.com/go-playground/validator/v10 v10.11.1
 	github.com/goccy/go-json v0.9.11
