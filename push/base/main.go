@@ -6,8 +6,6 @@ import (
 )
 
 // Sender is a base struct for Sender.
-//
-//goland:noinspection GoNameStartsWithPackageName
 type Sender struct {
 	Message       *Message
 	Tokens        []string
@@ -22,9 +20,7 @@ func (s *Sender) New(message *Message, tokens []string) {
 }
 
 // Send sends notification.
-func (s *Sender) Send() bool {
-	return true
-}
+func (s *Sender) Send() {}
 
 // Clear expired tokens.
 func (s *Sender) Clear() {
@@ -36,6 +32,6 @@ func (s *Sender) Clear() {
 		s.ExpiredTokens,
 	).Error
 	if err != nil {
-		log.Printf("Delete expired tokens failed: %s", err)
+		log.Printf("Delete expired tokens failed: %s\n", err)
 	}
 }

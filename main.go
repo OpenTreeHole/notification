@@ -1,7 +1,11 @@
 package main
 
 import (
+	"log"
 	"notification/app"
+	"os"
+	"os/signal"
+	"syscall"
 )
 
 // @title Notification Center
@@ -18,9 +22,24 @@ import (
 // @BasePath /api
 
 func main() {
-	myApp := app.Create()
-	err := myApp.Listen("0.0.0.0:8000")
+	a := app.Create()
+
+	go func() {
+		err := a.Listen("0.0.0.0:8000")
+		if err != nil {
+			log.Fatal(err)
+		}
+	}()
+
+	interrupt := make(chan os.Signal, 1)
+
+	// wait for CTRL-C interrupt
+	signal.Notify(interrupt, syscall.SIGINT, syscall.SIGTERM)
+	<-interrupt
+
+	// close app
+	err := a.Shutdown()
 	if err != nil {
-		panic(err)
+		log.Println(err)
 	}
 }
