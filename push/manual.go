@@ -10,7 +10,7 @@ func manualSend(service PushService, title string, description string, data Map,
 		Description: description,
 		Data:        data,
 	}
-	sender := factory.CreateSender(service)
+	sender := CreateSender(service)
 	sender.New(&m, tokens)
 	sender.Send()
 	sender.Clear()
