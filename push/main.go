@@ -16,7 +16,7 @@ func CreateSender(service PushService) Sender {
 	case ServiceMipush:
 		return &mipush.Sender{}
 	default:
-		log.Printf("%s not implemented", service.String())
+		log.Printf("%s not implemented", service)
 		return &base.Sender{}
 	}
 }

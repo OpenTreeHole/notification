@@ -20,18 +20,20 @@ const (
 var PushServices = []PushService{ServiceAPNS, ServiceFCM, ServiceMipush}
 
 func (s PushService) MarshalText() ([]byte, error) {
-	var name string
+	return []byte(s.String()), nil
+}
+
+func (s PushService) String() string {
 	switch s {
 	case ServiceAPNS:
-		name = "apns"
+		return "apns"
 	case ServiceFCM:
-		name = "fcm"
+		return "fcm"
 	case ServiceMipush:
-		name = "mipush"
+		return "mipush"
 	default:
-		name = "unknown"
+		return "unknown"
 	}
-	return []byte(name), nil
 }
 
 func (s *PushService) UnmarshalText(text []byte) error {
