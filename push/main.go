@@ -8,10 +8,8 @@ import (
 	"notification/push/mipush"
 )
 
-var factory = SenderFactory{}
-
 // CreateSender creates a sender for a certain push service.
-func (factory SenderFactory) CreateSender(service PushService) Sender {
+func CreateSender(service PushService) Sender {
 	switch service {
 	case ServiceAPNS:
 		return &apns.Sender{}
@@ -41,7 +39,7 @@ func Send(message Message) bool {
 			continue
 		}
 
-		sender := factory.CreateSender(service)
+		sender := CreateSender(service)
 		sender.New(&message, tokens)
 		success = sender.Send() && success
 		sender.Clear()
