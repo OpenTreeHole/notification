@@ -35,28 +35,30 @@ func (s *Sender) Send() bool {
 	for k, v := range data {
 		form.Add(k, v)
 	}
-	req, _ := http.NewRequest(
+	req, err := http.NewRequest(
 		"POST",
 		mipushURL,
 		strings.NewReader(form.Encode()),
 	)
+	if err != nil {
+		log.Println("mipush request error: " + err.Error())
+	}
 	req.Header.Set("Authorization", authorization)
 	req.Header.Add("Content-Type", "application/x-www-form-urlencoded")
 	resp, err := client.Do(req)
 
-	s.Response = readBody(resp.Body)
-
 	if err != nil {
 		log.Printf("error sending mipush: %s\n", err)
 		return false
-	} else if resp.StatusCode != 200 || s.getStatusCode() != 0 {
-		log.Println("failed sending mipush")
-		fmt.Println(s.Response)
-		return false
 	} else {
-		log.Println("mipush sent successfully")
-		return true
+		s.Response = readBody(resp.Body)
+		if resp.StatusCode != 200 || s.getStatusCode() != 0 {
+			log.Println("failed sending mipush")
+			fmt.Println(s.Response)
+			return false
+		}
 	}
+	return true
 }
 
 func (s *Sender) Clear() {
