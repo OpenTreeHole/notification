@@ -22,22 +22,17 @@ func ListTokens(c *fiber.Ctx) error {
 // @Summary Add Token of a User
 // @Tags Token
 // @Produce application/json
-// @Param json body CreateModel true "json"
+// @Param json body models.PushToken true "json"
 // @Router /users/push-tokens [post]
 // @Success 200 {object} PushToken
 func AddToken(c *fiber.Ctx) error {
-	var body CreateModel
-	err := ValidateBody(c, &body)
+	var token PushToken
+	err := ValidateBody(c, &token)
 	if err != nil {
 		return err
 	}
 
-	token := PushToken{
-		UserID:   c.Locals("userID").(int),
-		Service:  ParsePushService(body.Service),
-		DeviceID: body.DeviceID,
-		Token:    body.Token,
-	}
+	token.UserID = c.Locals("userID").(int)
 	result := DB.Save(&token)
 	if result.Error != nil {
 		return result.Error
@@ -70,4 +65,8 @@ func DeleteToken(c *fiber.Ctx) error {
 	}
 
 	return c.Status(204).JSON(nil)
+}
+
+type DeleteModel struct {
+	DeviceID string `json:"device_id" validate:"max=64"`
 }

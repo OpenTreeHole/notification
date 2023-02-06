@@ -1,10 +1,12 @@
 package models
 
+import "strings"
+
 type PushToken struct {
-	UserID   int         `json:"user_id" gorm:"primaryKey;not null"`
-	Service  PushService `json:"service" gorm:"not null"`
-	DeviceID string      `json:"device_id" gorm:"primaryKey;not null"`
-	Token    string      `json:"token" gorm:"not null"`
+	UserID   int         `json:"user_id" gorm:"primaryKey;not null"` // not required
+	Service  PushService `json:"service" gorm:"not null" validate:"required,oneof=apns fcm mipush"`
+	DeviceID string      `json:"device_id" gorm:"primaryKey;not null" validate:"required,max=64"`
+	Token    string      `json:"token" gorm:"not null" validate:"required,max=64"`
 }
 
 type PushService uint8
@@ -17,32 +19,31 @@ const (
 
 var PushServices = []PushService{ServiceAPNS, ServiceFCM, ServiceMipush}
 
-func (s PushService) String() string {
+func (s PushService) MarshalText() ([]byte, error) {
+	var name string
 	switch s {
 	case ServiceAPNS:
-		return "apns"
+		name = "apns"
 	case ServiceFCM:
-		return "fcm"
+		name = "fcm"
 	case ServiceMipush:
-		return "mipush"
+		name = "mipush"
 	default:
-		return "unknown"
+		name = "unknown"
 	}
+	return []byte(name), nil
 }
 
-func ParsePushService(s string) PushService {
-	switch s {
+func (s *PushService) UnmarshalText(text []byte) error {
+	switch strings.ToLower(string(text)) {
 	case "apns":
-		return ServiceAPNS
+		*s = ServiceAPNS
 	case "fcm":
-		return ServiceFCM
+		*s = ServiceFCM
 	case "mipush":
-		return ServiceMipush
+		*s = ServiceMipush
 	default:
-		return ServiceAPNS
+		*s = ServiceAPNS
 	}
-}
-
-func (s PushService) MarshalJSON() ([]byte, error) {
-	return []byte(`"` + s.String() + `"`), nil
+	return nil
 }
