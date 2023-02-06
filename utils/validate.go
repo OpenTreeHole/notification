@@ -9,10 +9,9 @@ import (
 )
 
 type ErrorDetailElement struct {
-	Field string                `json:"field"`
-	Tag   string                `json:"tag"`
-	Value string                `json:"value"`
-	Error *validator.FieldError `json:"-"`
+	Field string `json:"field"`
+	Tag   string `json:"tag"`
+	Value string `json:"value"`
 }
 
 type ErrorDetail []*ErrorDetailElement
@@ -50,25 +49,12 @@ func Validate(model any) error {
 				Field: err.Field(),
 				Tag:   err.Tag(),
 				Value: err.Param(),
-				Error: &err,
 			}
 			errorDetail = append(errorDetail, &detail)
 		}
 		return &errorDetail
 	}
 	return nil
-}
-
-func ValidateQuery(c *fiber.Ctx, model any) error {
-	err := c.QueryParser(model)
-	if err != nil {
-		return err
-	}
-	err = defaults.Set(model)
-	if err != nil {
-		return err
-	}
-	return Validate(model)
 }
 
 func ValidateBody(c *fiber.Ctx, model any) error {
