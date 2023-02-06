@@ -3,9 +3,8 @@ package mipush
 import (
 	"github.com/goccy/go-json"
 	"io"
-	"io/ioutil"
+	"log"
 	. "notification/models"
-	. "notification/utils"
 	"strings"
 )
 
@@ -23,21 +22,18 @@ func getExpiredTokens(resp Map) []string {
 
 func readBody(body io.ReadCloser) Map {
 	defer func(body io.ReadCloser) {
-		err := body.Close()
-		if err != nil {
-			Logger.Error("Close error: " + err.Error())
-		}
+		_ = body.Close()
 	}(body)
 
-	data, err := ioutil.ReadAll(body)
+	data, err := io.ReadAll(body)
 	if err != nil {
-		Logger.Error("Read body failed: " + err.Error())
+		log.Printf("Read body failed: %s", err)
 		return Map{}
 	}
 	var response Map
 	err = json.Unmarshal(data, &response)
 	if err != nil {
-		Logger.Error("Unmarshal body failed: " + err.Error())
+		log.Printf("Unmarshal body failed: %s", err)
 		return Map{}
 	}
 	return response

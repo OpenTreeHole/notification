@@ -1,11 +1,11 @@
 package push
 
 import (
+	"log"
 	. "notification/models"
 	"notification/push/apns"
 	"notification/push/base"
 	"notification/push/mipush"
-	"notification/utils"
 )
 
 var factory = SenderFactory{}
@@ -18,7 +18,7 @@ func (factory SenderFactory) CreateSender(service PushService) Sender {
 	case ServiceMipush:
 		return &mipush.Sender{}
 	default:
-		utils.Logger.Warn(string(service) + " not implemented")
+		log.Printf("%s not implemented", service.String())
 		return &base.Sender{}
 	}
 }

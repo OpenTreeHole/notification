@@ -1,11 +1,12 @@
 package base
 
 import (
+	"log"
 	. "notification/models"
-	. "notification/utils"
 )
 
 // Sender is a base struct for Sender.
+//
 //goland:noinspection GoNameStartsWithPackageName
 type Sender struct {
 	Message       *Message
@@ -28,7 +29,6 @@ func (s *Sender) Send() bool {
 // Clear expired tokens.
 func (s *Sender) Clear() {
 	if len(s.ExpiredTokens) == 0 {
-		Logger.Debug("No expired tokens, skip clear")
 		return
 	}
 	err := DB.Exec(
@@ -36,6 +36,6 @@ func (s *Sender) Clear() {
 		s.ExpiredTokens,
 	).Error
 	if err != nil {
-		Logger.Error("Delete expired tokens failed: " + err.Error())
+		log.Printf("Delete expired tokens failed: %s", err)
 	}
 }
