@@ -1,7 +1,6 @@
 package config
 
 import (
-	"fmt"
 	"os"
 
 	"gorm.io/driver/mysql"
@@ -12,13 +11,6 @@ import (
 
 var DB *gorm.DB
 
-const (
-	TypeMysql = iota
-	TypeSqlite
-)
-
-var DBType uint
-
 var gormConfig = &gorm.Config{
 	NamingStrategy: schema.NamingStrategy{
 		SingularTable: true, // use singular table name, table for `User` would be `user` with this option enabled
@@ -27,14 +19,10 @@ var gormConfig = &gorm.Config{
 }
 
 func mysqlDB() (*gorm.DB, error) {
-	DBType = TypeMysql
-	fmt.Println("db type: mysql")
 	return gorm.Open(mysql.Open(Config.DbUrl), gormConfig)
 }
 
 func sqliteDB() (*gorm.DB, error) {
-	DBType = TypeSqlite
-	fmt.Println("db type: sqlite")
 	err := os.MkdirAll("data", 0750)
 	if err != nil {
 		panic(err)
@@ -43,13 +31,10 @@ func sqliteDB() (*gorm.DB, error) {
 }
 
 func memoryDB() (*gorm.DB, error) {
-	DBType = TypeSqlite
-	fmt.Println("db type: memory")
 	return gorm.Open(sqlite.Open("file::memory:?cache=shared"), gormConfig)
 }
 
 func init() {
-	fmt.Println("init db config...")
 	var err error
 	switch Config.Mode {
 	case "production":
