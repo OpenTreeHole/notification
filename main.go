@@ -8,18 +8,15 @@ import (
 // @version 2.0.0
 // @description This is a notification microservice.
 
-// @contact.name Maintainer Shi Yue
-// @contact.email hasbai@fduhole.com
+// @contact.name Maintainer OpenTreeHole
+// @contact.email dev@fduhole.com
 
 // @license.name Apache 2.0
-// @license.url http://www.apache.org/licenses/LICENSE-2.0.html
+// @license.url https://www.apache.org/licenses/LICENSE-2.0.html
 
 // @host
 // @BasePath /api
 
-// @securityDefinitions.apikey ApiKeyAuth
-// @in header
-// @name Authorization
 func main() {
 	myApp := app.Create()
 	err := myApp.Listen("0.0.0.0:8000")

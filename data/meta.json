@@ -1,10 +1,9 @@
 {
   "name": "Notification",
   "description": "This is a notification microservice.",
-  "version": "0.1.0",
+  "version": "2.0.0",
   "homepage": "https://github.com/opentreehole",
   "repository": "https://github.com/OpenTreeHole/notification",
-  "author": "hasbai",
   "email": "dev@fduhole.com",
   "license": "Apache-2.0"
 }
