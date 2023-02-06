@@ -1,35 +1,6 @@
 basePath: /api
 definitions:
-  message.CreateModel:
-    properties:
-      data:
-        $ref: '#/definitions/models.JSON'
-      description:
-        type: string
-      recipients:
-        items:
-          type: integer
-        type: array
-      title:
-        type: string
-      type:
-        description: message type, change "oneof" when MessageType changes
-        enum:
-        - favorite
-        - reply
-        - mention
-        - modify
-        - report
-        - permission
-        - report_dealt
-        type: string
-      url:
-        type: string
-    required:
-    - recipients
-    - type
-    type: object
-  models.JSON:
+  models.Map:
     additionalProperties: {}
     type: object
   models.Message:
@@ -37,37 +8,46 @@ definitions:
       code:
         type: string
       data:
-        $ref: '#/definitions/models.JSON'
+        $ref: '#/definitions/models.Map'
       description:
         type: string
-      has_read:
-        description: 兼容旧版
-        type: boolean
-      id:
-        type: integer
       message:
         type: string
-      message_id:
-        description: 兼容旧版 id
-        type: integer
-      time_created:
-        type: string
-      time_updated:
-        type: string
+      recipients:
+        items:
+          type: integer
+        type: array
       url:
         type: string
+    required:
+    - code
+    - data
+    - description
+    - message
+    - recipients
+    - url
     type: object
   models.MessageModel:
     properties:
       message:
         type: string
     type: object
+  models.PushService:
+    enum:
+    - 0
+    - 1
+    - 2
+    type: integer
+    x-enum-varnames:
+    - ServiceAPNS
+    - ServiceFCM
+    - ServiceMipush
   models.PushToken:
     properties:
       device_id:
         type: string
       service:
-        type: integer
+        $ref: '#/definitions/models.PushService'
       token:
         type: string
       user_id:
@@ -119,19 +99,6 @@ paths:
           schema:
             $ref: '#/definitions/models.MessageModel'
   /messages:
-    get:
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            items:
-              $ref: '#/definitions/models.Message'
-            type: array
-      summary: List Messages of a User
-      tags:
-      - Message
     post:
       description: Send to multiple recipients and save to db, admin only.
       parameters:
@@ -140,7 +107,7 @@ paths:
         name: json
         required: true
         schema:
-          $ref: '#/definitions/message.CreateModel'
+          $ref: '#/definitions/models.Message'
       produces:
       - application/json
       responses:
@@ -149,41 +116,6 @@ paths:
           schema:
             $ref: '#/definitions/models.Message'
       summary: Send a message
-      tags:
-      - Message
-    put:
-      produces:
-      - application/json
-      responses:
-        "204":
-          description: No Content
-      summary: Clear Messages Deprecated
-      tags:
-      - Message
-  /messages/{id}:
-    delete:
-      parameters:
-      - description: message id
-        in: path
-        name: id
-        required: true
-        type: integer
-      produces:
-      - application/json
-      responses:
-        "204":
-          description: No Content
-      summary: Delete a message of a user
-      tags:
-      - Message
-  /messages/clear:
-    post:
-      produces:
-      - application/json
-      responses:
-        "204":
-          description: No Content
-      summary: Clear Messages of a User
       tags:
       - Message
   /users/push-tokens:

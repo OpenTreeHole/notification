@@ -39,40 +39,6 @@ const docTemplate = `{
             }
         },
         "/messages": {
-            "get": {
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "Message"
-                ],
-                "summary": "List Messages of a User",
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "type": "array",
-                            "items": {
-                                "$ref": "#/definitions/models.Message"
-                            }
-                        }
-                    }
-                }
-            },
-            "put": {
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "Message"
-                ],
-                "summary": "Clear Messages Deprecated",
-                "responses": {
-                    "204": {
-                        "description": "No Content"
-                    }
-                }
-            },
             "post": {
                 "description": "Send to multiple recipients and save to db, admin only.",
                 "produces": [
@@ -89,7 +55,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/message.CreateModel"
+                            "$ref": "#/definitions/models.Message"
                         }
                     }
                 ],
@@ -99,47 +65,6 @@ const docTemplate = `{
                         "schema": {
                             "$ref": "#/definitions/models.Message"
                         }
-                    }
-                }
-            }
-        },
-        "/messages/clear": {
-            "post": {
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "Message"
-                ],
-                "summary": "Clear Messages of a User",
-                "responses": {
-                    "204": {
-                        "description": "No Content"
-                    }
-                }
-            }
-        },
-        "/messages/{id}": {
-            "delete": {
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "Message"
-                ],
-                "summary": "Delete a message of a user",
-                "parameters": [
-                    {
-                        "type": "integer",
-                        "description": "message id",
-                        "name": "id",
-                        "in": "path",
-                        "required": true
-                    }
-                ],
-                "responses": {
-                    "204": {
-                        "description": "No Content"
                     }
                 }
             }
@@ -221,17 +146,31 @@ const docTemplate = `{
         }
     },
     "definitions": {
-        "message.CreateModel": {
+        "models.Map": {
+            "type": "object",
+            "additionalProperties": {}
+        },
+        "models.Message": {
             "type": "object",
             "required": [
+                "code",
+                "data",
+                "description",
+                "message",
                 "recipients",
-                "type"
+                "url"
             ],
             "properties": {
+                "code": {
+                    "type": "string"
+                },
                 "data": {
-                    "$ref": "#/definitions/models.JSON"
+                    "$ref": "#/definitions/models.Map"
                 },
                 "description": {
+                    "type": "string"
+                },
+                "message": {
                     "type": "string"
                 },
                 "recipients": {
@@ -239,63 +178,6 @@ const docTemplate = `{
                     "items": {
                         "type": "integer"
                     }
-                },
-                "title": {
-                    "type": "string"
-                },
-                "type": {
-                    "description": "message type, change \"oneof\" when MessageType changes",
-                    "type": "string",
-                    "enum": [
-                        "favorite",
-                        "reply",
-                        "mention",
-                        "modify",
-                        "report",
-                        "permission",
-                        "report_dealt"
-                    ]
-                },
-                "url": {
-                    "type": "string"
-                }
-            }
-        },
-        "models.JSON": {
-            "type": "object",
-            "additionalProperties": {}
-        },
-        "models.Message": {
-            "type": "object",
-            "properties": {
-                "code": {
-                    "type": "string"
-                },
-                "data": {
-                    "$ref": "#/definitions/models.JSON"
-                },
-                "description": {
-                    "type": "string"
-                },
-                "has_read": {
-                    "description": "兼容旧版",
-                    "type": "boolean"
-                },
-                "id": {
-                    "type": "integer"
-                },
-                "message": {
-                    "type": "string"
-                },
-                "message_id": {
-                    "description": "兼容旧版 id",
-                    "type": "integer"
-                },
-                "time_created": {
-                    "type": "string"
-                },
-                "time_updated": {
-                    "type": "string"
                 },
                 "url": {
                     "type": "string"
@@ -310,6 +192,19 @@ const docTemplate = `{
                 }
             }
         },
+        "models.PushService": {
+            "type": "integer",
+            "enum": [
+                0,
+                1,
+                2
+            ],
+            "x-enum-varnames": [
+                "ServiceAPNS",
+                "ServiceFCM",
+                "ServiceMipush"
+            ]
+        },
         "models.PushToken": {
             "type": "object",
             "properties": {
@@ -317,7 +212,7 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "service": {
-                    "type": "integer"
+                    "$ref": "#/definitions/models.PushService"
                 },
                 "token": {
                     "type": "string"

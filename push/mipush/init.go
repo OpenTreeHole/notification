@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"net/http"
 	"notification/config"
-	"notification/utils"
 	"os"
 	"time"
 )
@@ -23,8 +22,7 @@ func init() {
 }
 
 func getMipushKey() string {
-	keyPath := utils.ToAbsolutePath(config.Config.MipushKeyPath)
-	data, err := os.ReadFile(keyPath)
+	data, err := os.ReadFile(config.Config.MipushKeyPath)
 	if err != nil {
 		panic(err)
 	}

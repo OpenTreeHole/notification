@@ -3,12 +3,12 @@ package mipush
 import (
 	"fmt"
 	"github.com/goccy/go-json"
+	"log"
 	"net/http"
 	"net/url"
 	"notification/config"
 	. "notification/models"
 	"notification/push/base"
-	. "notification/utils"
 	"strings"
 )
 
@@ -47,14 +47,14 @@ func (s *Sender) Send() bool {
 	s.Response = readBody(resp.Body)
 
 	if err != nil {
-		Logger.Error("error sending mipush" + err.Error())
+		log.Printf("error sending mipush: %s\n", err)
 		return false
 	} else if resp.StatusCode != 200 || s.getStatusCode() != 0 {
-		Logger.Warn("failed sending mipush")
+		log.Println("failed sending mipush")
 		fmt.Println(s.Response)
 		return false
 	} else {
-		Logger.Debug("mipush sent successfully")
+		log.Println("mipush sent successfully")
 		return true
 	}
 }

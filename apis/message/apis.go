@@ -17,7 +17,7 @@ func RegisterRoutes(app fiber.Router) {
 // @Description Send to multiple recipients and save to db, admin only.
 // @Tags Message
 // @Produce application/json
-// @Param json body CreateModel true "json"
+// @Param json body models.Message true "json"
 // @Router /messages [post]
 // @Success 201 {object} Message
 func SendMessage(c *fiber.Ctx) error {

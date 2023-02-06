@@ -1,12 +1,11 @@
 package apns
 
 import (
-	"fmt"
 	"github.com/sideshow/apns2"
+	"log"
 	"notification/config"
 	. "notification/models"
 	"notification/push/base"
-	"notification/utils"
 	"strings"
 )
 
@@ -24,20 +23,18 @@ func (s *Sender) Send() bool {
 			Payload:     constructPayload(s.Message),
 		})
 		if err != nil || res == nil {
-			utils.Logger.Error("APNS push error: " + err.Error())
+			log.Printf("APNS push error: %s", err.Error())
 			success = false
 		} else if res.StatusCode != 200 {
-			utils.Logger.Warn(fmt.Sprintf(
-				"APNS push failed: %d %s",
-				res.StatusCode, res.Reason,
-			))
+			log.Printf("APNS push failed: %d %s",
+				res.StatusCode, res.Reason)
 			if strings.Contains(res.Reason, "DeviceToken") {
 				// device token is expired, remove it from database
 				s.ExpiredTokens = append(s.ExpiredTokens, token)
 			}
 			success = false
 		} else {
-			utils.Logger.Debug("APNS push success for " + token)
+			log.Printf("APNS push success for %s", token)
 		}
 	}
 
@@ -50,5 +47,4 @@ func constructPayload(message *Message) any {
 		"subtitle": message.Description,
 		"body":     message.Data,
 	}}}
-
 }
