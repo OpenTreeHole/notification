@@ -1,10 +1,13 @@
 package models
 
-import "strings"
+import (
+	"errors"
+	"strings"
+)
 
 type PushToken struct {
 	UserID   int         `json:"user_id" gorm:"primaryKey;not null"` // not required
-	Service  PushService `json:"service" gorm:"not null" validate:"required,oneof=apns fcm mipush"`
+	Service  PushService `json:"service" gorm:"not null"`
 	DeviceID string      `json:"device_id" gorm:"primaryKey;not null" validate:"required,max=64"`
 	Token    string      `json:"token" gorm:"not null" validate:"required,max=64"`
 }
@@ -45,7 +48,7 @@ func (s *PushService) UnmarshalText(text []byte) error {
 	case "mipush":
 		*s = ServiceMipush
 	default:
-		*s = ServiceAPNS
+		return errors.New("unknown push service")
 	}
 	return nil
 }
