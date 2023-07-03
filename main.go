@@ -1,7 +1,8 @@
 package main
 
 import (
-	"log"
+	_ "github.com/opentreehole/go-common" // init common, zerolog setting
+	"github.com/rs/zerolog/log"
 	"notification/app"
 	"os"
 	"os/signal"
@@ -27,7 +28,7 @@ func main() {
 	go func() {
 		err := a.Listen("0.0.0.0:8000")
 		if err != nil {
-			log.Fatal(err)
+			log.Fatal().Err(err).Msg("failed to listen")
 		}
 	}()
 
@@ -40,6 +41,6 @@ func main() {
 	// close app
 	err := a.Shutdown()
 	if err != nil {
-		log.Println(err)
+		log.Warn().Err(err).Msg("failed to shutdown")
 	}
 }

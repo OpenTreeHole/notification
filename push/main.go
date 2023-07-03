@@ -1,7 +1,7 @@
 package push
 
 import (
-	"log"
+	"github.com/rs/zerolog/log"
 	. "notification/models"
 	"notification/push/apns"
 	"notification/push/base"
@@ -16,7 +16,7 @@ func CreateSender(service PushService) Sender {
 	case ServiceMipush:
 		return &mipush.Sender{}
 	default:
-		log.Printf("%s not implemented", service)
+		log.Error().Msgf("%s not implemented", service)
 		return &base.Sender{}
 	}
 }

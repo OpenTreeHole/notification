@@ -3,13 +3,15 @@ package models
 import (
 	"errors"
 	"strings"
+	"time"
 )
 
 type PushToken struct {
-	UserID   int         `json:"user_id" gorm:"primaryKey;not null"` // not required
-	Service  PushService `json:"service" gorm:"not null"`
-	DeviceID string      `json:"device_id" gorm:"primaryKey;not null" validate:"required,max=64"`
-	Token    string      `json:"token" gorm:"not null" validate:"required,max=64"`
+	UserID    int         `json:"user_id" gorm:"primaryKey;not null"` // not required
+	Service   PushService `json:"service" gorm:"not null"`
+	DeviceID  string      `json:"device_id" gorm:"primaryKey;not null" validate:"required,max=64"`
+	Token     string      `json:"token" gorm:"not null" validate:"required,max=64"`
+	CreatedAt time.Time   `json:"created_at" gorm:"autoCreateTime;not null;default:CURRENT_TIMESTAMP"`
 }
 
 type PushService uint8

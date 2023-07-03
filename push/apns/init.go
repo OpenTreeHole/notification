@@ -2,10 +2,9 @@ package apns
 
 import (
 	"crypto/tls"
-	"fmt"
+	"github.com/rs/zerolog/log"
 	"github.com/sideshow/apns2"
 	"github.com/sideshow/apns2/certificate"
-	"log"
 	"notification/config"
 )
 
@@ -13,11 +12,11 @@ var cert tls.Certificate
 var client *apns2.Client
 
 func init() {
-	fmt.Println("init apns")
+	log.Debug().Msg("init apns")
 	var err error
 	cert, err = certificate.FromPemFile(config.Config.APNSKeyPath, "")
 	if err != nil {
-		log.Fatal("Cert Error: ", err)
+		log.Fatal().Err(err).Msg("Cert Error")
 	}
 	client = apns2.NewClient(cert).Production()
 }

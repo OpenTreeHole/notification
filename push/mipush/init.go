@@ -1,7 +1,7 @@
 package mipush
 
 import (
-	"fmt"
+	"github.com/rs/zerolog/log"
 	"net/http"
 	"notification/config"
 	"os"
@@ -17,7 +17,7 @@ var client = http.Client{Timeout: timeout}
 var authorization string
 
 func init() {
-	fmt.Println("init mipush")
+	log.Debug().Msg("init mipush")
 	authorization = "key=" + getMipushKey()
 }
 

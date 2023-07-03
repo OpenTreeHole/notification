@@ -7,7 +7,7 @@ var Config struct {
 	Debug bool   `env:"DEBUG" envDefault:"false"`
 	// example: user:pass@tcp(127.0.0.1:3306)/dbname?parseTime=true
 	// for more detail, see https://github.com/go-sql-driver/mysql#dsn-data-source-name
-	DbUrl string `env:"DB_URL,required"`
+	DbUrl string `env:"DB_URL"`
 	// in production mode, use docker secrets
 	MipushKeyPath      string `env:"MIPUSH_KEY_PATH" envDefault:"data/mipush.pem"`
 	APNSKeyPath        string `env:"APNS_KEY_PATH" envDefault:"data/apns.pem"`

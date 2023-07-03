@@ -28,3 +28,8 @@ func RegisterRoutes(app *fiber.App) {
 	token.RegisterRoutes(group)
 	message.RegisterRoutes(group)
 }
+
+func RegisterTasks() {
+	token.RegisterTasks()
+	//message.RegisterTasks()
+}

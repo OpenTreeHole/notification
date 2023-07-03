@@ -1,8 +1,8 @@
 package apns
 
 import (
+	"github.com/rs/zerolog/log"
 	"github.com/sideshow/apns2"
-	"log"
 	"notification/config"
 	. "notification/models"
 	"notification/push/base"
@@ -21,11 +21,11 @@ func (s *Sender) Send() {
 			Payload:     constructPayload(s.Message),
 		})
 		if err != nil || res == nil {
-			log.Printf("APNS push error: %s\n", err)
+			log.Error().Msgf("APNS push error: %s\n", err)
 			return
 		}
 		if res.StatusCode != 200 {
-			log.Printf("APNS push failed: %d %s\n",
+			log.Error().Msgf("APNS push failed: %d %s\n",
 				res.StatusCode, res.Reason)
 			if strings.Contains(res.Reason, "DeviceToken") {
 				// device token is expired, remove it from database

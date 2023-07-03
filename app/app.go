@@ -11,13 +11,15 @@ import (
 
 func Create() *fiber.App {
 	app := fiber.New(fiber.Config{
-		AppName:      "notification",
-		ErrorHandler: utils.MyErrorHandler,
-		JSONEncoder:  json.Marshal,
-		JSONDecoder:  json.Unmarshal,
+		AppName:               "notification",
+		ErrorHandler:          utils.MyErrorHandler,
+		JSONEncoder:           json.Marshal,
+		JSONDecoder:           json.Unmarshal,
+		DisableStartupMessage: true,
 	})
 	RegisterMiddlewares(app)
 	apis.RegisterRoutes(app)
+	apis.RegisterTasks()
 
 	return app
 }

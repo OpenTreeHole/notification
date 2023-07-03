@@ -1,9 +1,8 @@
 package mipush
 
 import (
-	"fmt"
 	"github.com/goccy/go-json"
-	"log"
+	"github.com/rs/zerolog/log"
 	"net/http"
 	"net/url"
 	"notification/config"
@@ -41,21 +40,20 @@ func (s *Sender) Send() {
 		strings.NewReader(form.Encode()),
 	)
 	if err != nil {
-		log.Println("mipush request error: " + err.Error())
+		log.Err(err).Msg("mipush request error")
 	}
 	req.Header.Set("Authorization", authorization)
 	req.Header.Add("Content-Type", "application/x-www-form-urlencoded")
 	resp, err := client.Do(req)
 
 	if err != nil {
-		log.Printf("error sending mipush: %s\n", err)
+		log.Err(err).Msg("error sending mipush")
 		return
 	}
 
 	s.Response = readBody(resp.Body)
 	if resp.StatusCode != 200 || s.getStatusCode() != 0 {
-		log.Println("failed sending mipush")
-		fmt.Println(s.Response)
+		log.Error().Any("response", s.Response).Msg("failed sending mipush")
 	}
 }
 

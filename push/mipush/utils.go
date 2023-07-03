@@ -2,8 +2,8 @@ package mipush
 
 import (
 	"github.com/goccy/go-json"
+	"github.com/rs/zerolog/log"
 	"io"
-	"log"
 	. "notification/models"
 	"strings"
 )
@@ -27,13 +27,13 @@ func readBody(body io.ReadCloser) Map {
 
 	data, err := io.ReadAll(body)
 	if err != nil {
-		log.Printf("Read body failed: %s", err)
+		log.Err(err).Msgf("Read body failed")
 		return Map{}
 	}
 	var response Map
 	err = json.Unmarshal(data, &response)
 	if err != nil {
-		log.Printf("Unmarshal body failed: %s", err)
+		log.Err(err).Msgf("Unmarshal body failed")
 		return Map{}
 	}
 	return response

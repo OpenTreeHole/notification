@@ -1,7 +1,7 @@
 package base
 
 import (
-	"log"
+	"github.com/rs/zerolog/log"
 	. "notification/models"
 )
 
@@ -32,6 +32,6 @@ func (s *Sender) Clear() {
 		s.ExpiredTokens,
 	).Error
 	if err != nil {
-		log.Printf("Delete expired tokens failed: %s\n", err)
+		log.Err(err).Msg("Delete expired tokens failed")
 	}
 }

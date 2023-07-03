@@ -1,12 +1,12 @@
 package models
 
 import (
+	"github.com/rs/zerolog"
 	"gorm.io/driver/mysql"
 	"gorm.io/driver/sqlite"
 	"gorm.io/gorm"
 	"gorm.io/gorm/logger"
 	"gorm.io/gorm/schema"
-	"log"
 	"notification/config"
 	"os"
 	"time"
@@ -14,13 +14,15 @@ import (
 
 var DB *gorm.DB
 
+var zeroLogger = zerolog.New(os.Stdout)
+
 var gormConfig = &gorm.Config{
 	NamingStrategy: schema.NamingStrategy{
 		SingularTable: true, // use singular table name, table for `User` would be `user` with this option enabled
 	},
 	PrepareStmt: true, // use PrepareStmt for `Save`, `Update` and `Delete`
 	Logger: logger.New(
-		log.Default(),
+		&zeroLogger,
 		logger.Config{
 			SlowThreshold:             time.Second,  // 慢 SQL 阈值
 			LogLevel:                  logger.Error, // 日志级别
