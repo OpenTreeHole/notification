@@ -22,8 +22,18 @@ func CreateSender(service PushService) Sender {
 }
 
 func Send(message Message) {
+
+	// load push tokens from database
 	var pushTokens []PushToken
-	DB.Where("user_id IN ?", message.Recipients).Find(&pushTokens)
+	err := DB.Where("user_id IN ?", message.Recipients).Find(&pushTokens).Error
+	if err != nil {
+		log.Err(err).Msg("Get push tokens failed")
+		return
+	}
+	if len(pushTokens) == 0 {
+		return
+	}
+
 	serviceTokenMapping := make(map[PushService][]string)
 	for _, serviceToken := range pushTokens {
 		serviceTokenMapping[serviceToken.Service] = append(

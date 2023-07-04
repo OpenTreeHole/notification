@@ -29,6 +29,8 @@ func (s *Sender) Send() {
 		"description":             s.Message.Description,
 		"payload":                 url.QueryEscape(string(payload)),
 		"extra.notify_effect":     "1",
+		"extra.callback":          config.Config.MipushCallbackUrl,
+		"extra.callback.type":     "19",
 	}
 	form := url.Values{}
 	for k, v := range data {
@@ -41,6 +43,7 @@ func (s *Sender) Send() {
 	)
 	if err != nil {
 		log.Err(err).Msg("mipush request error")
+		return
 	}
 	req.Header.Set("Authorization", authorization)
 	req.Header.Add("Content-Type", "application/x-www-form-urlencoded")
@@ -55,12 +58,4 @@ func (s *Sender) Send() {
 	if resp.StatusCode != 200 || s.getStatusCode() != 0 {
 		log.Error().Any("response", s.Response).Msg("failed sending mipush")
 	}
-}
-
-func (s *Sender) Clear() {
-	if s.Response == nil {
-		return
-	}
-	s.ExpiredTokens = getExpiredTokens(s.Response)
-	s.Sender.Clear()
 }

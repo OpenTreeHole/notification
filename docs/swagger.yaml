@@ -44,32 +44,21 @@ definitions:
     - ServiceMipush
   models.PushToken:
     properties:
+      created_at:
+        type: string
       device_id:
+        maxLength: 64
         type: string
       service:
         $ref: '#/definitions/models.PushService'
       token:
+        maxLength: 64
         type: string
       user_id:
+        description: not required
         type: integer
-    type: object
-  token.CreateModel:
-    properties:
-      device_id:
-        maxLength: 64
-        type: string
-      service:
-        enum:
-        - apns
-        - fcm
-        - mipush
-        type: string
-      token:
-        maxLength: 64
-        type: string
     required:
     - device_id
-    - service
     - token
     type: object
   token.DeleteModel:
@@ -80,12 +69,12 @@ definitions:
     type: object
 info:
   contact:
-    email: hasbai@fduhole.com
-    name: Maintainer Shi Yue
+    email: dev@fduhole.com
+    name: Maintainer OpenTreeHole
   description: This is a notification microservice.
   license:
     name: Apache 2.0
-    url: http://www.apache.org/licenses/LICENSE-2.0.html
+    url: https://www.apache.org/licenses/LICENSE-2.0.html
   title: Notification Center
   version: 2.0.0
 paths:
@@ -98,6 +87,16 @@ paths:
           description: OK
           schema:
             $ref: '#/definitions/models.MessageModel'
+  /callback/mipush:
+    post:
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+      summary: Mipush Callback
+      tags:
+      - Callback
   /messages:
     post:
       description: Send to multiple recipients and save to db, admin only.
@@ -155,7 +154,7 @@ paths:
         name: json
         required: true
         schema:
-          $ref: '#/definitions/token.CreateModel'
+          $ref: '#/definitions/models.PushToken'
       produces:
       - application/json
       responses:
@@ -166,9 +165,4 @@ paths:
       summary: Add Token of a User
       tags:
       - Token
-securityDefinitions:
-  ApiKeyAuth:
-    in: header
-    name: Authorization
-    type: apiKey
 swagger: "2.0"

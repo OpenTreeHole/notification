@@ -8,8 +8,7 @@ require (
 	github.com/go-playground/validator/v10 v10.14.1
 	github.com/goccy/go-json v0.10.2
 	github.com/gofiber/fiber/v2 v2.47.0
-	github.com/hetiansu5/urlquery v1.2.7
-	github.com/opentreehole/go-common v0.0.0-20230703150251-f1797b3cc350
+	github.com/opentreehole/go-common v0.0.0-20230704135523-9ae6b9da52e0
 	github.com/rs/zerolog v1.29.1
 	github.com/sideshow/apns2 v0.23.0
 	github.com/stretchr/testify v1.8.4
@@ -34,6 +33,7 @@ require (
 	github.com/go-sql-driver/mysql v1.7.1 // indirect
 	github.com/golang-jwt/jwt/v4 v4.5.0 // indirect
 	github.com/google/uuid v1.3.0 // indirect
+	github.com/hetiansu5/urlquery v1.2.7 // indirect
 	github.com/jinzhu/inflection v1.0.0 // indirect
 	github.com/jinzhu/now v1.1.5 // indirect
 	github.com/josharian/intern v1.0.0 // indirect

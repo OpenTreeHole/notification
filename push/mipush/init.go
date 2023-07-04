@@ -24,7 +24,7 @@ func init() {
 func getMipushKey() string {
 	data, err := os.ReadFile(config.Config.MipushKeyPath)
 	if err != nil {
-		panic(err)
+		log.Panic().Err(err).Msg("failed to read mipush key")
 	}
 	return string(data)
 }

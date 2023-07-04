@@ -5,20 +5,7 @@ import (
 	"github.com/rs/zerolog/log"
 	"io"
 	. "notification/models"
-	"strings"
 )
-
-func getExpiredTokens(resp Map) []string {
-	data, ok := resp["data"].(Map)
-	if !ok {
-		return []string{}
-	}
-	tokens, ok := data["bad_regids"].(string)
-	if !ok {
-		return []string{}
-	}
-	return strings.Split(tokens, ",")
-}
 
 func readBody(body io.ReadCloser) Map {
 	defer func(body io.ReadCloser) {

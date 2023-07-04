@@ -1,6 +1,7 @@
 package apis
 
 import (
+	"notification/apis/callback"
 	"notification/apis/message"
 	"notification/apis/token"
 	_ "notification/docs"
@@ -27,6 +28,7 @@ func RegisterRoutes(app *fiber.App) {
 
 	token.RegisterRoutes(group)
 	message.RegisterRoutes(group)
+	callback.RegisterRoutes(group)
 }
 
 func RegisterTasks() {

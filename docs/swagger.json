@@ -4,12 +4,12 @@
         "description": "This is a notification microservice.",
         "title": "Notification Center",
         "contact": {
-            "name": "Maintainer Shi Yue",
-            "email": "hasbai@fduhole.com"
+            "name": "Maintainer OpenTreeHole",
+            "email": "dev@fduhole.com"
         },
         "license": {
             "name": "Apache 2.0",
-            "url": "http://www.apache.org/licenses/LICENSE-2.0.html"
+            "url": "https://www.apache.org/licenses/LICENSE-2.0.html"
         },
         "version": "2.0.0"
     },
@@ -26,6 +26,22 @@
                         "schema": {
                             "$ref": "#/definitions/models.MessageModel"
                         }
+                    }
+                }
+            }
+        },
+        "/callback/mipush": {
+            "post": {
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Callback"
+                ],
+                "summary": "Mipush Callback",
+                "responses": {
+                    "200": {
+                        "description": "OK"
                     }
                 }
             }
@@ -97,7 +113,7 @@
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/token.CreateModel"
+                            "$ref": "#/definitions/models.PushToken"
                         }
                     }
                 ],
@@ -199,44 +215,28 @@
         },
         "models.PushToken": {
             "type": "object",
+            "required": [
+                "device_id",
+                "token"
+            ],
             "properties": {
-                "device_id": {
+                "created_at": {
                     "type": "string"
+                },
+                "device_id": {
+                    "type": "string",
+                    "maxLength": 64
                 },
                 "service": {
                     "$ref": "#/definitions/models.PushService"
                 },
                 "token": {
-                    "type": "string"
+                    "type": "string",
+                    "maxLength": 64
                 },
                 "user_id": {
+                    "description": "not required",
                     "type": "integer"
-                }
-            }
-        },
-        "token.CreateModel": {
-            "type": "object",
-            "required": [
-                "device_id",
-                "service",
-                "token"
-            ],
-            "properties": {
-                "device_id": {
-                    "type": "string",
-                    "maxLength": 64
-                },
-                "service": {
-                    "type": "string",
-                    "enum": [
-                        "apns",
-                        "fcm",
-                        "mipush"
-                    ]
-                },
-                "token": {
-                    "type": "string",
-                    "maxLength": 64
                 }
             }
         },
@@ -248,13 +248,6 @@
                     "maxLength": 64
                 }
             }
-        }
-    },
-    "securityDefinitions": {
-        "ApiKeyAuth": {
-            "type": "apiKey",
-            "name": "Authorization",
-            "in": "header"
         }
     }
 }

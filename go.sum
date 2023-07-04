@@ -98,8 +98,8 @@ github.com/mattn/go-runewidth v0.0.14/go.mod h1:Jdepj2loyihRzMpdS35Xk/zdY8IAYHsh
 github.com/mattn/go-sqlite3 v1.14.17 h1:mCRHCLDUBXgpKAqIKsaAaAsrAlbkeomtRFKXh2L6YIM=
 github.com/mattn/go-sqlite3 v1.14.17/go.mod h1:2eHXhiwb8IkHr+BDWZGa96P6+rkvnG63S2DGjv9HUNg=
 github.com/niemeyer/pretty v0.0.0-20200227124842-a10e7caefd8e/go.mod h1:zD1mROLANZcx1PVRCS0qkT7pwLkGfwJo4zjcN/Tysno=
-github.com/opentreehole/go-common v0.0.0-20230703150251-f1797b3cc350 h1:mULVlnNkghz09GAd7yn5CkFvNOiwOXLIthhiXeoPgss=
-github.com/opentreehole/go-common v0.0.0-20230703150251-f1797b3cc350/go.mod h1:/LN3A05Ecato8SoYo3tlnDH8PndgosyzmAsUOUkYJ54=
+github.com/opentreehole/go-common v0.0.0-20230704135523-9ae6b9da52e0 h1:fvZm67l+mFtDCiUylt+TkZWQPP2x7DVfRgB/n3SkxlM=
+github.com/opentreehole/go-common v0.0.0-20230704135523-9ae6b9da52e0/go.mod h1:/LN3A05Ecato8SoYo3tlnDH8PndgosyzmAsUOUkYJ54=
 github.com/otiai10/copy v1.7.0/go.mod h1:rmRl6QPdJj6EiUqXQ/4Nn2lLXoNQjFCQbbNrxgc/t3U=
 github.com/otiai10/curr v0.0.0-20150429015615-9b4961190c95/go.mod h1:9qAhocn7zKJG+0mI8eUu6xqkFDYS2kb2saOteoSB3cE=
 github.com/otiai10/curr v1.0.0/go.mod h1:LskTG5wDwr8Rs+nNQ+1LlxRjAtTZZjtJW4rMXl6j4vs=
