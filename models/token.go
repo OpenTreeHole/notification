@@ -10,9 +10,9 @@ type PushToken struct {
 	UserID    int         `json:"user_id" gorm:"primaryKey;not null"` // not required
 	Service   PushService `json:"service" gorm:"not null"`
 	DeviceID  string      `json:"device_id" gorm:"uniqueIndex:,length:10;not null;size:64" validate:"required,max=64"`
-	Token     string      `json:"token" gorm:"primaryKey;not null;size:64" validate:"required,max=64"`
-	CreatedAt time.Time   `json:"created_at"`
-	UpdatedAt time.Time   `json:"updated_at"`
+	Token     string      `json:"token" gorm:"primaryKey;not null;size:64;index:,length:10" validate:"required,max=64"`
+	CreatedAt time.Time   `json:"created_at" gorm:"autoCreateTime"`
+	UpdatedAt time.Time   `json:"updated_at" gorm:"autoUpdateTime"`
 }
 
 type PushService uint8
