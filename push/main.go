@@ -12,12 +12,12 @@ import (
 func CreateSender(service PushService) Sender {
 	switch service {
 	case ServiceAPNS:
-		return &apns.Sender{}
+		return &apns.Sender{Sender: base.Sender{Service: ServiceAPNS}}
 	case ServiceMipush:
-		return &mipush.Sender{}
+		return &mipush.Sender{Sender: base.Sender{Service: ServiceMipush}}
 	default:
 		log.Error().Msgf("%s not implemented", service)
-		return &base.Sender{}
+		return &base.Sender{Service: ServiceUnknown}
 	}
 }
 

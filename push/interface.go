@@ -12,5 +12,4 @@ type Sender interface {
 	New(message *Message, tokens []string) // New Initialize the sender.
 	Send()                                 // Send notification.
 	Clear()                                // Clear expired tokens.
-	Service() PushService                  // Service returns the push service of the sender.
 }

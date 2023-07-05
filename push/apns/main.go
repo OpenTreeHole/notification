@@ -42,10 +42,6 @@ func (s *Sender) Send() {
 	}
 }
 
-func (s *Sender) Service() PushService {
-	return ServiceAPNS
-}
-
 func constructPayload(message *Message) any {
 	return Map{"aps": Map{"alert": Map{
 		"title":    message.Title,
