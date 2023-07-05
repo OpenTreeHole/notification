@@ -12,7 +12,7 @@ func deleteExpiredTokens(context context.Context) {
 		select {
 		case <-ticker.C:
 			// delete tokens created_at more than a month ago
-			DB.Where("created_at < ?", time.Now().AddDate(0, -1, 0)).Delete(PushToken{})
+			DB.Where("updated_at < ?", time.Now().AddDate(0, -1, 0)).Delete(PushToken{})
 		case <-context.Done():
 			return
 		}

@@ -45,13 +45,13 @@ func AddToken(c *fiber.Ctx) (err error) {
 	token.UserID = userID
 	err = DB.Transaction(func(tx *gorm.DB) (err error) {
 		// remove all device_id duplicates
-		err = tx.Where("device_id = ?", token.DeviceID).Delete(&PushToken{}).Error
+		err = tx.Where("device_id = ? and token <> ?", token.DeviceID, token.Token).Delete(&PushToken{}).Error
 		if err != nil {
 			return err
 		}
 
-		// create new token
-		return tx.Create(&token).Error
+		// create or update new token
+		return tx.Save(&token).Error
 	})
 	if err != nil {
 		return err
