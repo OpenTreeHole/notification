@@ -13,13 +13,18 @@ import (
 // @Produce application/json
 // @Router /users/push-tokens [get]
 // @Success 200 {array} PushToken
-func ListTokens(c *fiber.Ctx) error {
-	var tokens []PushToken
+func ListTokens(c *fiber.Ctx) (err error) {
+	// get user_id from jwt
 	userID, ok := c.Locals("user_id").(int)
 	if !ok {
 		return common.Unauthorized()
 	}
-	DB.Where("user_id = ?", userID).Find(&tokens)
+
+	var tokens []PushToken
+	err = DB.Where("user_id = ?", userID).Find(&tokens).Error
+	if err != nil {
+		return err
+	}
 	return c.JSON(tokens)
 }
 
@@ -65,19 +70,24 @@ func AddToken(c *fiber.Ctx) (err error) {
 // @Param json body DeleteModel true "json"
 // @Router /users/push-tokens [delete]
 // @Success 204
-func DeleteToken(c *fiber.Ctx) error {
+func DeleteToken(c *fiber.Ctx) (err error) {
 	body, err := common.ValidateBody[DeleteModel](c)
 	if err != nil {
 		return err
 	}
 
-	querySet := DB.Where("user_id = ?", c.Locals("userID").(int))
+	userID, ok := c.Locals("user_id").(int)
+	if !ok {
+		return common.Unauthorized()
+	}
+
+	querySet := DB.Where("user_id = ?", userID)
 	if body.DeviceID != "" {
 		querySet = querySet.Where("device_id = ?", body.DeviceID)
 	}
-	result := querySet.Delete(&PushToken{})
-	if result.Error != nil {
-		return result.Error
+	err = querySet.Delete(&PushToken{}).Error
+	if err != nil {
+		return err
 	}
 
 	return c.Status(204).JSON(nil)
@@ -85,4 +95,24 @@ func DeleteToken(c *fiber.Ctx) error {
 
 type DeleteModel struct {
 	DeviceID string `json:"device_id" validate:"max=64"`
+}
+
+// DeleteAllTokens
+// @Summary Delete all tokens of a user
+// @Tags Token
+// @Produce application/json
+// @Router /users/push-tokens/_all [delete]
+// @Success 204
+func DeleteAllTokens(c *fiber.Ctx) (err error) {
+	userID, ok := c.Locals("user_id").(int)
+	if !ok {
+		return common.Unauthorized()
+	}
+
+	err = DB.Where("user_id = ?", userID).Delete(&PushToken{}).Error
+	if err != nil {
+		return err
+	}
+
+	return c.Status(204).JSON(nil)
 }

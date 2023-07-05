@@ -10,6 +10,7 @@ func RegisterRoutes(app fiber.Router) {
 	app.Post("/users/push-tokens", AddToken)
 	app.Put("/users/push-tokens", AddToken)
 	app.Delete("/users/push-tokens", DeleteToken)
+	app.Delete("/users/push-tokens/_all", DeleteAllTokens)
 }
 
 func RegisterTasks() {

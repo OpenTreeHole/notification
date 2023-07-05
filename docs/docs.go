@@ -159,6 +159,22 @@ const docTemplate = `{
                     }
                 }
             }
+        },
+        "/users/push-tokens/_all": {
+            "delete": {
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Token"
+                ],
+                "summary": "Delete all tokens of a user",
+                "responses": {
+                    "204": {
+                        "description": "No Content"
+                    }
+                }
+            }
         }
     },
     "definitions": {
@@ -241,6 +257,9 @@ const docTemplate = `{
                 "token": {
                     "type": "string",
                     "maxLength": 64
+                },
+                "updated_at": {
+                    "type": "string"
                 },
                 "user_id": {
                     "description": "not required",

@@ -54,6 +54,8 @@ definitions:
       token:
         maxLength: 64
         type: string
+      updated_at:
+        type: string
       user_id:
         description: not required
         type: integer
@@ -163,6 +165,16 @@ paths:
           schema:
             $ref: '#/definitions/models.PushToken'
       summary: Add Token of a User
+      tags:
+      - Token
+  /users/push-tokens/_all:
+    delete:
+      produces:
+      - application/json
+      responses:
+        "204":
+          description: No Content
+      summary: Delete all tokens of a user
       tags:
       - Token
 swagger: "2.0"
