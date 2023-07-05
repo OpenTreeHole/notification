@@ -25,7 +25,7 @@ var Config struct {
 func init() { // load config from environment variables
 	err := env.Parse(&Config)
 	if err != nil {
-		panic(err)
+		log.Fatal().Err(err).Msg("load config from environment variables failed")
 	}
 
 	if Config.Debug {

@@ -9,7 +9,7 @@ import (
 )
 
 func RegisterMiddlewares(app *fiber.App) {
-	app.Use(recover.New(recover.Config{EnableStackTrace: true}))
+	app.Use(recover.New(recover.Config{EnableStackTrace: true, StackTraceHandler: common.StackTraceHandler}))
 	app.Use(common.MiddlewareGetUserID)
 	app.Use(common.MiddlewareCustomLogger)
 	if config.Config.Debug {

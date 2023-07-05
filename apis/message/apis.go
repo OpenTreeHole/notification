@@ -1,11 +1,10 @@
 package message
 
 import (
+	"github.com/gofiber/fiber/v2"
+	"github.com/opentreehole/go-common"
 	. "notification/models"
 	"notification/push"
-	. "notification/utils"
-
-	"github.com/gofiber/fiber/v2"
 )
 
 func RegisterRoutes(app fiber.Router) {
@@ -21,8 +20,7 @@ func RegisterRoutes(app fiber.Router) {
 // @Router /messages [post]
 // @Success 201 {object} Message
 func SendMessage(c *fiber.Ctx) error {
-	var message Message
-	err := ValidateBody(c, &message)
+	message, err := common.ValidateBody[Message](c)
 	if err != nil {
 		return err
 	}

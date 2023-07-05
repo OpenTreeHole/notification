@@ -21,7 +21,7 @@ func CreateSender(service PushService) Sender {
 	}
 }
 
-func Send(message Message) {
+func Send(message *Message) {
 
 	// load push tokens from database
 	var pushTokens []PushToken
@@ -49,7 +49,7 @@ func Send(message Message) {
 		}
 
 		sender := CreateSender(service)
-		sender.New(&message, tokens)
+		sender.New(message, tokens)
 		sender.Send()
 		sender.Clear()
 	}

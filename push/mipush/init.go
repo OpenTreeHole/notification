@@ -25,7 +25,7 @@ func getMipushKey() string {
 	data, err := os.ReadFile(config.Config.MipushKeyPath)
 	if err != nil {
 		pwd, _ := os.Getwd()
-		log.Panic().Str("pwd", pwd).Err(err).Msg("failed to read mipush key")
+		log.Fatal().Str("pwd", pwd).Err(err).Str("scope", "init mipush").Msg("failed to read mipush key")
 	}
 	return string(data)
 }

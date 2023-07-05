@@ -5,7 +5,6 @@ import (
 	"github.com/opentreehole/go-common"
 	"gorm.io/gorm"
 	. "notification/models"
-	. "notification/utils"
 )
 
 // ListTokens
@@ -32,8 +31,7 @@ func ListTokens(c *fiber.Ctx) error {
 // @Router /users/push-tokens [post]
 // @Success 200 {object} PushToken
 func AddToken(c *fiber.Ctx) (err error) {
-	var token PushToken
-	err = ValidateBody(c, &token)
+	token, err := common.ValidateBody[PushToken](c)
 	if err != nil {
 		return err
 	}
@@ -68,8 +66,7 @@ func AddToken(c *fiber.Ctx) (err error) {
 // @Router /users/push-tokens [delete]
 // @Success 204
 func DeleteToken(c *fiber.Ctx) error {
-	var body DeleteModel
-	err := ValidateBody(c, &body)
+	body, err := common.ValidateBody[DeleteModel](c)
 	if err != nil {
 		return err
 	}

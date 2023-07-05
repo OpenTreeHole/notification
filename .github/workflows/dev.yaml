@@ -12,6 +12,12 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@master
+      - name: Set up Go
+        uses: actions/setup-go@master
+        with:
+          go-version: '1.20'
+      - name: Automated Testing
+        run: go test -v ./...
       - name: Set up QEMU
         uses: docker/setup-qemu-action@master
       - name: Set up Docker Buildx
@@ -21,6 +27,12 @@ jobs:
         with:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
+      - name: Login to Aliyun ACR
+        uses: aliyun/acr-login@master
+        with:
+          login-server: https://registry.cn-shanghai.aliyuncs.com
+          username: ${{ secrets.ACR_USERNAME }}
+          password: ${{ secrets.ACR_PASSWORD }}
       - name: Build and push
         id: docker_build
         uses: docker/build-push-action@master
@@ -29,4 +41,5 @@ jobs:
           tags: |
             ${{ secrets.DOCKERHUB_USERNAME }}/${{ env.APP_NAME }}:dev
             ${{ secrets.DOCKERHUB_USERNAME }}/${{ env.APP_NAME }}:latest
-
+            registry.cn-shanghai.aliyuncs.com/${{ secrets.ACR_NAMESPACE }}/${{ env.APP_NAME }}:master
+            registry.cn-shanghai.aliyuncs.com/${{ secrets.ACR_NAMESPACE }}/${{ env.APP_NAME }}:latest

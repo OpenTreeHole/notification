@@ -2,6 +2,7 @@ package models
 
 import (
 	"github.com/rs/zerolog"
+	"github.com/rs/zerolog/log"
 	"gorm.io/driver/mysql"
 	"gorm.io/driver/sqlite"
 	"gorm.io/gorm"
@@ -39,7 +40,7 @@ func mysqlDB() (*gorm.DB, error) {
 func sqliteDB() (*gorm.DB, error) {
 	err := os.MkdirAll("data", 0750)
 	if err != nil {
-		panic(err)
+		log.Fatal().Err(err).Msg("create sqlite data dir failed")
 	}
 	return gorm.Open(sqlite.Open("data/sqlite.db"), gormConfig)
 }
@@ -64,10 +65,10 @@ func init() {
 	case "perf":
 		DB, err = sqliteDB()
 	default:
-		panic("unknown mode")
+		log.Fatal().Str("scope", "gorm init").Str("mode", config.Config.Mode).Msg("unknown mode")
 	}
 	if err != nil {
-		panic(err)
+		log.Fatal().Err(err).Str("scope", "init gorm").Msg("connect to database failed")
 	}
 
 	switch config.Config.Mode {
@@ -79,6 +80,6 @@ func init() {
 
 	err = DB.AutoMigrate(&PushToken{})
 	if err != nil {
-		panic(err)
+		log.Fatal().Err(err).Str("scope", "init gorm").Msg("auto migrate failed")
 	}
 }
