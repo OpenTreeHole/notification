@@ -1,14 +1,19 @@
 package config
 
-import "github.com/caarlos0/env/v6"
+import (
+	"github.com/caarlos0/env/v6"
+	"github.com/rs/zerolog"
+	"github.com/rs/zerolog/log"
+)
 
 var Config struct {
 	Mode  string `env:"MODE" envDefault:"dev"`
 	Debug bool   `env:"DEBUG" envDefault:"false"`
 	// example: user:pass@tcp(127.0.0.1:3306)/dbname?parseTime=true
 	// for more detail, see https://github.com/go-sql-driver/mysql#dsn-data-source-name
-	DbUrl             string `env:"DB_URL"`
-	MipushCallbackUrl string `env:"MIPUSH_CALLBACK_URL" envDefault:"https://notification.fduhole.com/api/callback/mipush"`
+	DbUrl string `env:"DB_URL"`
+	// mipush callback only support http
+	MipushCallbackUrl string `env:"MIPUSH_CALLBACK_URL" envDefault:"http://notification.fduhole.com/api/callback/mipush"`
 
 	// in production mode, use docker secrets
 	MipushKeyPath      string `env:"MIPUSH_KEY_PATH" envDefault:"data/mipush.pem"`
@@ -21,5 +26,12 @@ func init() { // load config from environment variables
 	err := env.Parse(&Config)
 	if err != nil {
 		panic(err)
+	}
+
+	if Config.Debug {
+		zerolog.SetGlobalLevel(zerolog.DebugLevel)
+		log.Debug().Any("config", Config).Msg("config loaded")
+	} else {
+		zerolog.SetGlobalLevel(zerolog.InfoLevel)
 	}
 }

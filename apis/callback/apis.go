@@ -29,24 +29,24 @@ func MipushCallback(c *fiber.Ctx) (err error) {
 	}
 
 	// parse data
-	expiredToken := make([]string, 0, 10)
-	replaceToken := make(map[string]string)
+	expiredTokens := make([]string, 0, 10)
+	replaceTokens := make(map[string]string)
 	for _, v := range data {
 		if v.Type == 16 {
-			expiredToken = append(expiredToken, strings.Split(v.Targets, ",")...)
+			expiredTokens = append(expiredTokens, strings.Split(v.Targets, ",")...)
 			for oldRegId, newRegId := range v.ReplaceTarget {
-				replaceToken[oldRegId] = newRegId
+				replaceTokens[oldRegId] = newRegId
 			}
 		}
 	}
 
 	// replace token
-	if len(replaceToken) > 0 {
-		replaceTokenKeys := common.Keys(replaceToken)
+	if len(replaceTokens) > 0 {
+		replaceTokenKeys := common.Keys(replaceTokens)
 
 		stringBuilder := strings.Builder{}
 		stringBuilder.WriteString("UPDATE `push_token` SET `token` = CASE `token`")
-		for k, v := range replaceToken {
+		for k, v := range replaceTokens {
 			stringBuilder.WriteString(" WHEN '")
 			stringBuilder.WriteString(k)
 			stringBuilder.WriteString("' THEN '")
@@ -58,25 +58,25 @@ func MipushCallback(c *fiber.Ctx) (err error) {
 		stringBuilder.WriteString("') AND `service` = 2") // mipush
 
 		logDict := zerolog.Dict()
-		for k, v := range replaceToken {
+		for k, v := range replaceTokens {
 			logDict.Str(k, v)
 		}
 
 		err = DB.Exec(stringBuilder.String()).Error
 		if err != nil {
-			log.Err(err).Dict("replaced_token", logDict).Msg("replace token failed")
+			log.Err(err).Dict("replaced_tokens", logDict).Msg("replace token failed")
 		} else {
-			log.Info().Dict("replaced_token", logDict).Msg("replace token success")
+			log.Info().Dict("replaced_tokens", logDict).Msg("replace token success")
 		}
 	}
 
 	// delete expired token
-	if len(expiredToken) > 0 {
-		err = DB.Where("token IN ? AND service = ?", expiredToken, ServiceMipush).Delete(&PushToken{}).Error
+	if len(expiredTokens) > 0 {
+		err = DB.Where("token IN ? AND service = ?", expiredTokens, ServiceMipush).Delete(&PushToken{}).Error
 		if err != nil {
-			log.Err(err).Strs("expired_token", expiredToken).Msg("delete token failed")
+			log.Err(err).Strs("expired_tokens", expiredTokens).Msg("delete token failed")
 		} else {
-			log.Info().Strs("expired_token", expiredToken).Msg("delete token success")
+			log.Info().Strs("expired_tokens", expiredTokens).Msg("delete token success")
 		}
 	}
 
