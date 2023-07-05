@@ -5,6 +5,7 @@ import (
 	"github.com/opentreehole/go-common"
 	"gorm.io/gorm"
 	. "notification/models"
+	"time"
 )
 
 // ListTokens
@@ -52,6 +53,9 @@ func AddToken(c *fiber.Ctx) (err error) {
 		if err != nil {
 			return err
 		}
+
+		token.CreatedAt = time.Now()
+		token.UpdatedAt = time.Now()
 
 		// create or update new token
 		return tx.Save(&token).Error
