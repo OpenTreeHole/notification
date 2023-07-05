@@ -59,3 +59,7 @@ func (s *Sender) Send() {
 		log.Error().Any("response", s.Response).Msg("failed sending mipush")
 	}
 }
+
+func (s *Sender) Service() PushService {
+	return ServiceMipush
+}

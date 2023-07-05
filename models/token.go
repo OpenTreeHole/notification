@@ -15,12 +15,13 @@ type PushToken struct {
 	UpdatedAt time.Time   `json:"updated_at" gorm:"autoUpdateTime"`
 }
 
-type PushService uint8
+type PushService int
 
 const (
 	ServiceAPNS PushService = iota
 	ServiceFCM
 	ServiceMipush
+	ServiceUnknown = -1
 )
 
 var PushServices = []PushService{ServiceAPNS, ServiceFCM, ServiceMipush}

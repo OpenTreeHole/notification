@@ -74,9 +74,9 @@ func MipushCallback(c *fiber.Ctx) (err error) {
 	if len(expiredTokens) > 0 {
 		err = DB.Where("token IN ? AND service = ?", expiredTokens, ServiceMipush).Delete(&PushToken{}).Error
 		if err != nil {
-			log.Err(err).Strs("expired_tokens", expiredTokens).Msg("delete token failed")
+			log.Err(err).Strs("expired_tokens", expiredTokens).Msg("delete expired tokens failed")
 		} else {
-			log.Info().Strs("expired_tokens", expiredTokens).Msg("delete token success")
+			log.Info().Str("scope", "mipush").Strs("expired_tokens", expiredTokens).Msg("delete expired tokens success")
 		}
 	}
 

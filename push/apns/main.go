@@ -1,12 +1,12 @@
 package apns
 
 import (
+	"errors"
 	"github.com/rs/zerolog/log"
 	"github.com/sideshow/apns2"
 	"notification/config"
 	. "notification/models"
 	"notification/push/base"
-	"strings"
 )
 
 type Sender struct {
@@ -21,18 +21,29 @@ func (s *Sender) Send() {
 			Payload:     constructPayload(s.Message),
 		})
 		if err != nil || res == nil {
-			log.Error().Msgf("APNS push error: %s\n", err)
+			log.Err(err).
+				Str("scope", "APNs").
+				Msgf("push error")
 			return
 		}
 		if res.StatusCode != 200 {
-			log.Error().Msgf("APNS push failed: %d %s\n",
-				res.StatusCode, res.Reason)
-			if strings.Contains(res.Reason, "DeviceToken") {
+			log.Err(errors.New("APNs push failed")).
+				Str("scope", "APNs").
+				Str("token", token).
+				Int("status", res.StatusCode).
+				Str("reason", res.Reason).
+				Msgf("APNs push failed")
+			// see https://developer.apple.com/documentation/usernotifications/setting_up_a_remote_notification_server/handling_notification_responses_from_apns
+			if res.StatusCode == 410 { // expired or unregistered
 				// device token is expired, remove it from database
 				s.ExpiredTokens = append(s.ExpiredTokens, token)
 			}
 		}
 	}
+}
+
+func (s *Sender) Service() PushService {
+	return ServiceAPNS
 }
 
 func constructPayload(message *Message) any {

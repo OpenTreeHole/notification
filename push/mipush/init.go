@@ -10,7 +10,7 @@ import (
 
 const (
 	mipushURL = "https://api.xmpush.xiaomi.com/v3/message/regid"
-	timeout   = time.Second * 10
+	timeout   = time.Second * 60
 )
 
 var client = http.Client{Timeout: timeout}

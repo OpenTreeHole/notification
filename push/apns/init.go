@@ -16,7 +16,7 @@ func init() {
 	var err error
 	cert, err = certificate.FromPemFile(config.Config.APNSKeyPath, "")
 	if err != nil {
-		log.Fatal().Err(err).Str("scope", "init apns").Msg("apns Cert Error")
+		log.Fatal().Err(err).Str("scope", "init APNs").Msg("APNs cert error")
 	}
 	client = apns2.NewClient(cert).Production()
 }
