@@ -37,7 +37,8 @@ func ListTokens(c *fiber.Ctx) (err error) {
 // @Router /users/push-tokens [post]
 // @Success 200 {object} PushToken
 func AddToken(c *fiber.Ctx) (err error) {
-	token, err := common.ValidateBody[PushToken](c)
+	var token PushToken
+	err = common.ValidateBody(c, &token)
 	if err != nil {
 		return err
 	}
@@ -64,7 +65,7 @@ func AddToken(c *fiber.Ctx) (err error) {
 		return err
 	}
 
-	return c.JSON(token)
+	return c.JSON(&token)
 }
 
 // DeleteToken
@@ -75,7 +76,8 @@ func AddToken(c *fiber.Ctx) (err error) {
 // @Router /users/push-tokens [delete]
 // @Success 204
 func DeleteToken(c *fiber.Ctx) (err error) {
-	body, err := common.ValidateBody[DeleteModel](c)
+	var body DeleteModel
+	err = common.ValidateBody(c, &body)
 	if err != nil {
 		return err
 	}

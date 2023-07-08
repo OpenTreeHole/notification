@@ -20,12 +20,13 @@ func RegisterRoutes(app fiber.Router) {
 // @Router /messages [post]
 // @Success 201 {object} Message
 func SendMessage(c *fiber.Ctx) error {
-	message, err := common.ValidateBody[Message](c)
+	var message Message
+	err := common.ValidateBody(c, &message)
 	if err != nil {
 		return err
 	}
 
-	go push.Send(message)
+	go push.Send(&message)
 
-	return c.Status(201).JSON(message)
+	return c.Status(201).JSON(&message)
 }

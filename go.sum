@@ -102,6 +102,8 @@ github.com/opentreehole/go-common v0.0.2 h1:krcJKHDGHkerTjuHqO8TqwWZuifyzGxSRKmq
 github.com/opentreehole/go-common v0.0.2/go.mod h1:/LN3A05Ecato8SoYo3tlnDH8PndgosyzmAsUOUkYJ54=
 github.com/opentreehole/go-common v0.0.3 h1:f4e4SwUZ8DuFJZzMPlVV2xaMiSJ20cVHSzhKyEC2VQE=
 github.com/opentreehole/go-common v0.0.3/go.mod h1:/LN3A05Ecato8SoYo3tlnDH8PndgosyzmAsUOUkYJ54=
+github.com/opentreehole/go-common v0.0.7 h1:cnega1obn8KqsRon8wj+8b0yAsD13twbNVXYCJNC2Qw=
+github.com/opentreehole/go-common v0.0.7/go.mod h1:fexiGygSsLjSALUkyz4afkOwxxRKm5mtNIU75NdxKN0=
 github.com/otiai10/copy v1.7.0/go.mod h1:rmRl6QPdJj6EiUqXQ/4Nn2lLXoNQjFCQbbNrxgc/t3U=
 github.com/otiai10/curr v0.0.0-20150429015615-9b4961190c95/go.mod h1:9qAhocn7zKJG+0mI8eUu6xqkFDYS2kb2saOteoSB3cE=
 github.com/otiai10/curr v1.0.0/go.mod h1:LskTG5wDwr8Rs+nNQ+1LlxRjAtTZZjtJW4rMXl6j4vs=
