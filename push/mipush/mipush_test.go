@@ -34,7 +34,7 @@ func TestMipush(t *testing.T) {
 		Recipients: recipients,
 	}
 
-	sender.Tokens = []string{"Hh3mT3w/bMmTCdp7/D3HcG2VmJ3wmQHscOXBT5oCo5mE7XsgNDvlIzgGe5+gqCYh"}
+	sender.Tokens = []PushToken{{Token: "Hh3mT3w/bMmTCdp7/D3HcG2VmJ3wmQHscOXBT5oCo5mE7XsgNDvlIzgGe5+gqCYh"}}
 
 	sender.Send()
 }

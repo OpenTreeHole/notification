@@ -24,11 +24,16 @@ func (s *Sender) Send() {
 		"url":  s.Message.URL,
 	})
 
+	var tokens []string
+	for _, token := range s.Tokens {
+		tokens = append(tokens, token.Token)
+	}
+
 	// https://dev.mi.com/distribute/doc/details?pId=1559
 	data := map[string]string{
 		// 根据registration_id，发送消息到指定设备上。
 		// 可以提供多个registration_id，发送给一组设备，不同的registration_id之间用“,”分割。
-		"registration_id": strings.Join(s.Tokens, ","),
+		"registration_id": strings.Join(tokens, ","),
 
 		// App的包名。V3版本支持多包名（中间用逗号分割）
 		"restricted_package_name": config.Config.AndroidPackageName,

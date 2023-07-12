@@ -9,7 +9,7 @@ import (
 
 // Sender sends a message to multiple tokens(devices) through a certain push service
 type Sender interface {
-	New(message *Message, tokens []string) // New Initialize the sender.
-	Send()                                 // Send notification.
-	Clear()                                // Clear expired tokens.
+	New(message *Message, tokens []PushToken) // New Initialize the sender.
+	Send()                                    // Send notification.
+	Clear()                                   // Clear expired tokens.
 }

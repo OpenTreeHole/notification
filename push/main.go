@@ -34,11 +34,11 @@ func Send(message *Message) {
 		return
 	}
 
-	serviceTokenMapping := make(map[PushService][]string)
+	serviceTokenMapping := make(map[PushService][]PushToken)
 	for _, serviceToken := range pushTokens {
 		serviceTokenMapping[serviceToken.Service] = append(
 			serviceTokenMapping[serviceToken.Service],
-			serviceToken.Token,
+			serviceToken,
 		)
 	}
 

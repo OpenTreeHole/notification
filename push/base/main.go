@@ -8,13 +8,13 @@ import (
 // Sender is a base struct for Sender.
 type Sender struct {
 	Message       *Message
-	Tokens        []string
+	Tokens        []PushToken
 	ExpiredTokens []string
 	Service       PushService
 }
 
 // New initializes a Sender.
-func (s *Sender) New(message *Message, tokens []string) {
+func (s *Sender) New(message *Message, tokens []PushToken) {
 	s.Message = message
 	s.Tokens = tokens
 	s.Message.Data["url"] = s.Message.URL
