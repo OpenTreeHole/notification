@@ -251,6 +251,9 @@ const docTemplate = `{
                     "type": "string",
                     "maxLength": 64
                 },
+                "package_name": {
+                    "type": "string"
+                },
                 "service": {
                     "$ref": "#/definitions/models.PushService"
                 },

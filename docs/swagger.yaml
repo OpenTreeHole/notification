@@ -49,6 +49,8 @@ definitions:
       device_id:
         maxLength: 64
         type: string
+      package_name:
+        type: string
       service:
         $ref: '#/definitions/models.PushService'
       token:
