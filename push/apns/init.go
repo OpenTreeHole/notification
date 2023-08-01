@@ -14,7 +14,6 @@ var cert tls.Certificate
 var client *apns2.Client
 
 func init() {
-	log.Debug().Msg("init apns")
 	var err error
 	cert, err = certificate.FromPemFile(config.Config.APNSKeyPath, "")
 	if err != nil {
@@ -22,7 +21,9 @@ func init() {
 	}
 	if config.Config.Mode == "dev" {
 		client = apns2.NewClient(cert).Development()
+		log.Debug().Msg("init apns; use development mode")
 	} else {
 		client = apns2.NewClient(cert).Production()
+		log.Debug().Msg("init apns; use production mode")
 	}
 }
