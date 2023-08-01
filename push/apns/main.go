@@ -67,8 +67,8 @@ func (s *Sender) Send() {
 				Str("reason", res.Reason).
 				Msgf("APNs push failed")
 			// see https://developer.apple.com/documentation/usernotifications/setting_up_a_remote_notification_server/handling_notification_responses_from_apns
-			if res.StatusCode == 410 { // expired or unregistered
-				// device token is expired, remove it from database
+			if res.StatusCode == 410 || // expired or unregistered device token
+				(res.StatusCode == 400 && res.Reason == "BadDeviceToken") { // bad device token
 				s.ExpiredTokens = append(s.ExpiredTokens, token.Token)
 			}
 		}
