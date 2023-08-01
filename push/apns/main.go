@@ -16,25 +16,52 @@ type Sender struct {
 }
 
 func (s *Sender) Send() {
+	var err error
+
 	for _, token := range s.Tokens {
 		packageName := config.Config.IOSPackageName
 		if token.PackageName != "" {
 			packageName = token.PackageName
 		}
-		res, err := client.Push(&apns2.Notification{
+
+		notification := apns2.Notification{
 			DeviceToken: token.Token,
 			Topic:       packageName,
 			Payload:     constructPayload(s.Message),
-		})
+		}
+
+		var (
+			res           *apns2.Response
+			currentClient *apns2.Client
+		)
+
+		if packageName == config.Config.IOSPackageNameV2 {
+			currentClient = clientV2
+		} else {
+			currentClient = client
+		}
+
+		if currentClient == nil {
+			log.Err(err).
+				Str("scope", "APNs").
+				Str("package_name", packageName).
+				Msgf("client is nil")
+			return
+		}
+
+		res, err = currentClient.Push(&notification)
+
 		if err != nil || res == nil {
 			log.Err(err).
 				Str("scope", "APNs").
+				Str("package_name", packageName).
 				Msgf("push error")
 			return
 		}
 		if res.StatusCode != 200 {
 			log.Err(errors.New("APNs push failed")).
 				Str("scope", "APNs").
+				Str("package_name", packageName).
 				Str("token", token.Token).
 				Int("status", res.StatusCode).
 				Str("reason", res.Reason).
