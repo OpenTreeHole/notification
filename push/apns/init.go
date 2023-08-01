@@ -2,9 +2,11 @@ package apns
 
 import (
 	"crypto/tls"
+
 	"github.com/rs/zerolog/log"
 	"github.com/sideshow/apns2"
 	"github.com/sideshow/apns2/certificate"
+
 	"notification/config"
 )
 
@@ -18,5 +20,9 @@ func init() {
 	if err != nil {
 		log.Fatal().Err(err).Str("scope", "init APNs").Msg("APNs cert error")
 	}
-	client = apns2.NewClient(cert).Production()
+	if config.Config.Mode == "dev" {
+		client = apns2.NewClient(cert).Development()
+	} else {
+		client = apns2.NewClient(cert).Production()
+	}
 }

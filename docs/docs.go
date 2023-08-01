@@ -106,6 +106,34 @@ const docTemplate = `{
                     }
                 }
             },
+            "put": {
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Token"
+                ],
+                "summary": "Add Token of a User",
+                "parameters": [
+                    {
+                        "description": "json",
+                        "name": "json",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/token.CreateTokenRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/models.PushToken"
+                        }
+                    }
+                }
+            },
             "post": {
                 "produces": [
                     "application/json"
@@ -121,7 +149,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/models.PushToken"
+                            "$ref": "#/definitions/token.CreateTokenRequest"
                         }
                     }
                 ],
@@ -224,23 +252,11 @@ const docTemplate = `{
                 }
             }
         },
-        "models.PushService": {
-            "type": "integer",
-            "enum": [
-                0,
-                1,
-                2
-            ],
-            "x-enum-varnames": [
-                "ServiceAPNS",
-                "ServiceFCM",
-                "ServiceMipush"
-            ]
-        },
         "models.PushToken": {
             "type": "object",
             "required": [
                 "device_id",
+                "service",
                 "token"
             ],
             "properties": {
@@ -255,7 +271,12 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "service": {
-                    "$ref": "#/definitions/models.PushService"
+                    "type": "string",
+                    "enum": [
+                        "apns",
+                        "fcm",
+                        "mipush"
+                    ]
                 },
                 "token": {
                     "type": "string",
@@ -267,6 +288,33 @@ const docTemplate = `{
                 "user_id": {
                     "description": "not required",
                     "type": "integer"
+                }
+            }
+        },
+        "token.CreateTokenRequest": {
+            "type": "object",
+            "required": [
+                "service"
+            ],
+            "properties": {
+                "device_id": {
+                    "type": "string",
+                    "maxLength": 64
+                },
+                "package_name": {
+                    "type": "string"
+                },
+                "service": {
+                    "type": "string",
+                    "enum": [
+                        "apns",
+                        "fcm",
+                        "mipush"
+                    ]
+                },
+                "token": {
+                    "type": "string",
+                    "maxLength": 64
                 }
             }
         },

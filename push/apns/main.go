@@ -2,8 +2,10 @@ package apns
 
 import (
 	"errors"
+
 	"github.com/rs/zerolog/log"
 	"github.com/sideshow/apns2"
+
 	"notification/config"
 	. "notification/models"
 	"notification/push/base"

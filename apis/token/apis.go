@@ -1,11 +1,13 @@
 package token
 
 import (
+	"time"
+
 	"github.com/gofiber/fiber/v2"
 	"github.com/opentreehole/go-common"
 	"gorm.io/gorm"
+
 	. "notification/models"
-	"time"
 )
 
 // ListTokens
@@ -29,16 +31,17 @@ func ListTokens(c *fiber.Ctx) (err error) {
 	return c.JSON(tokens)
 }
 
-// AddToken
+// CreateToken
 // @Summary Add Token of a User
 // @Tags Token
 // @Produce application/json
-// @Param json body models.PushToken true "json"
+// @Param json body CreateTokenRequest true "json"
 // @Router /users/push-tokens [post]
+// @Router /users/push-tokens [put]
 // @Success 200 {object} PushToken
-func AddToken(c *fiber.Ctx) (err error) {
-	var token PushToken
-	err = common.ValidateBody(c, &token)
+func CreateToken(c *fiber.Ctx) (err error) {
+	var body CreateTokenRequest
+	err = common.ValidateBody(c, &body)
 	if err != nil {
 		return err
 	}
@@ -47,16 +50,23 @@ func AddToken(c *fiber.Ctx) (err error) {
 	if !ok {
 		return common.Unauthorized()
 	}
-	token.UserID = userID
+
+	token := PushToken{
+		UserID:      userID,
+		Service:     NewPushService(body.Service),
+		DeviceID:    body.DeviceID,
+		Token:       body.Token,
+		PackageName: body.PackageName,
+		CreatedAt:   time.Now(),
+		UpdatedAt:   time.Now(),
+	}
+
 	err = DB.Transaction(func(tx *gorm.DB) (err error) {
 		// remove all device_id duplicates
 		err = tx.Where("device_id = ?", token.DeviceID).Delete(&PushToken{}).Error
 		if err != nil {
 			return err
 		}
-
-		token.CreatedAt = time.Now()
-		token.UpdatedAt = time.Now()
 
 		// create or update new token
 		return tx.Save(&token).Error
