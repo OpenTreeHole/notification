@@ -1,6 +1,9 @@
 package apns
 
 import (
+	"crypto/tls"
+	"strings"
+
 	"github.com/rs/zerolog/log"
 	"github.com/sideshow/apns2"
 	"github.com/sideshow/apns2/certificate"
@@ -21,7 +24,17 @@ func init() {
 
 // initAPNS init apns
 func initAPNS(path string, client **apns2.Client) {
-	cert, err := certificate.FromPemFile(path, "")
+	var (
+		err  error
+		cert tls.Certificate
+	)
+
+	if strings.HasSuffix(path, ".p12") {
+		cert, err = certificate.FromP12File(path, "")
+	} else {
+		cert, err = certificate.FromPemFile(path, "")
+	}
+
 	if err != nil {
 		log.Warn().Err(err).Str("scope", "init APNs").Msg("APNs cert error")
 		return

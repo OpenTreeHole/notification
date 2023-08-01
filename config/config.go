@@ -17,7 +17,7 @@ var Config struct {
 
 	// in production mode, use docker secrets
 	MipushKeyPath      string `env:"MIPUSH_KEY_PATH" envDefault:"data/mipush.pem"`
-	APNSKeyPath        string `env:"APNS_KEY_PATH" envDefault:"data/apns.p8"`
+	APNSKeyPath        string `env:"APNS_KEY_PATH" envDefault:"data/apns.pem"`
 	APNSKeyPathV2      string `env:"APNS_KEY_V2_PATH" envDefault:"data/apns_v2.p8"`
 	IOSPackageName     string `env:"IOS_PACKAGE_NAME" envDefault:"io.github.danxi-dev.dan-xi"`
 	IOSPackageNameV2   string `env:"IOS_PACKAGE_V2_NAME" envDefault:"com.fduhole.danxi"`
