@@ -5,7 +5,7 @@ go 1.21
 require (
 	github.com/caarlos0/env/v6 v6.10.1
 	github.com/goccy/go-json v0.10.2
-	github.com/gofiber/fiber/v2 v2.52.0
+	github.com/gofiber/fiber/v2 v2.52.1
 	github.com/opentreehole/go-common v0.1.1
 	github.com/rs/zerolog v1.31.0
 	github.com/sideshow/apns2 v0.23.0
