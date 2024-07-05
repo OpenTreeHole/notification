@@ -19,6 +19,8 @@ var Config struct {
 	MipushKeyPath      string `env:"MIPUSH_KEY_PATH" envDefault:"data/mipush.pem"`
 	APNSKeyPath        string `env:"APNS_KEY_PATH" envDefault:"data/apns.pem"`
 	APNSKeyPathV2      string `env:"APNS_KEY_PATH_V2" envDefault:"data/apns_v2.p8"`
+	APNSKeyPassword    string `env:"APNS_KEY_PASSWORD" envDefault:""`
+	APNSKeyPasswordV2  string `env:"APNS_KEY_PASSWORD_V2" envDefault:""`
 	IOSPackageName     string `env:"IOS_PACKAGE_NAME" envDefault:"io.github.danxi-dev.dan-xi"`
 	IOSPackageNameV2   string `env:"IOS_PACKAGE_NAME_V2" envDefault:"com.fduhole.danxi"`
 	AndroidPackageName string `env:"ANDROID_PACKAGE_NAME" envDefault:"io.github.danxi_dev.dan_xi"`
