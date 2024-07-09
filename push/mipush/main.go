@@ -45,7 +45,7 @@ func (s *Sender) Send() {
 		"description": common.StripContent(s.Message.Description, 127),
 
 		// 消息的内容。（注意：需要对payload字符串做urlencode处理）
-		"payload": url.QueryEscape(string(payload)),
+		"payload": common.StripContent(url.QueryEscape(string(payload)), 4095),
 
 		// 可选项，预定义通知栏消息的点击行为。通过设置extra.notify_effect的值以得到不同的预定义点击行为。
 		// “1″：通知栏点击后打开app的Launcher Activity。
