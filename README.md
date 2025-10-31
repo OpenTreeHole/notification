@@ -3,7 +3,7 @@
 This is a notification microservice.
 
 ## Features
-- support apns and mipush notifications 
+- support apns and mipush notifications
 - REST API to manage notification and user device tokens
 
 ## Usage
@@ -20,12 +20,22 @@ go build -o notification.exe
 ./notification.exe
 ```
 
+### Run
+Before running, export `MODE` and `BASE_PATH`:
+
+```bash
+export BASE_PATH=$PWD
+# Available modes: production / dev / test / perf
+export MODE=dev
+go run main.go
+```
+
 ### Test
 Please export `MODE=test` and `BASE_PATH=$PWD`
 to avoid relative path errors in unit tests.
 
-Device tokens must be set to test push notifications, 
-export `${service}_DEVICE_TOKEN` for each push service, 
+Device tokens must be set to test push notifications,
+export `${service}_DEVICE_TOKEN` for each push service,
 e.g. `APNS_DEVICE_TOKEN=1234567`
 
 ### API Docs
@@ -51,7 +61,7 @@ Please visit http://localhost:8000/docs after running app
 
 Feel free to dive in! [Open an issue](https://github.com/OpenTreeHole/notification/issues/new) or [Submit PRs](https://github.com/OpenTreeHole/notification/compare).
 
-We are now in rapid development, any contribution would be of great help. 
+We are now in rapid development, any contribution would be of great help.
 For the developing roadmap, please visit [this issue](https://github.com/OpenTreeHole/notification/issues/1).
 
 ### Contributors
